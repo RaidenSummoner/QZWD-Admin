@@ -1,20 +1,18 @@
 <template>
   <div>
+    
     <div>
+      
       <span>
-        <div class="button">
-          <el-button type="primary" @click="showDialog">+新增</el-button>
-
-          <el-button size="mini" @click="getTabledata()">ces</el-button>
-        </div>
-
         <el-dialog :visible.sync="dialogVisible" title="咨询">
+         
           <el-form
             :model="ruleForm"
             :rules="rules"
             ref="ruleForm"
             label-width="100px"
-            class="demo-ruleForm">
+            class="demo-ruleForm"
+          >
             <el-form-item label="内容标题" prop="title">
               <el-input v-model="ruleForm.title"></el-input>
             </el-form-item>
@@ -70,7 +68,7 @@
                 type="text"
                 style="width: 30%; float: left"
               ></el-input>
-
+              
               <div class="button">
                 <el-button @click="addnew">新增</el-button>
               </div>
@@ -104,13 +102,9 @@
               >
             </el-form-item>
           </el-form>
-          <!-- <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitForm">确 定</el-button>
-          </div> -->
         </el-dialog>
-        <div class="button">
-          <el-button
+        <el-button type="primary" @click="showDialog">+新增</el-button>
+        <el-button
             type="primary"
             @click="publishSelected"
             :disabled="selectedRows.length === 0"
@@ -122,7 +116,6 @@
             :disabled="selectedRows.length === 0"
             >一键取消</el-button
           >
-        </div>
         <el-cascader
           ref="myCascader"
           :options="options"
@@ -132,20 +125,16 @@
           v-model="cascaded"
           @change="handelChange"
         ></el-cascader>
-        <el-select v-model="value1" filterable placeholder="请输入关键词">
-          <el-option
-            v-for="item in option"
-            :key="item.value1"
-            :label="item.label"
-            :value="item.value1"
-          >
-          </el-option>
-        </el-select>
+        <el-input
+          v-model="inputText"
+          placeholder="请输入内容"
+          style="width: 250px" ></el-input>
+          <el-button type="primary" @click="search">搜索</el-button>
       </span>
     </div>
-
+    
     <el-table
-      :data="tableData"
+      :data="tableList"
       style="width: 100%"
       :default-sort="{ prop: 'date', order: 'descending' }"
       @selection-change="handleSelectionChange"
@@ -182,6 +171,7 @@
         </template>
       </el-table-column>
     </el-table>
+    
   </div>
 </template>
 <script>
@@ -209,6 +199,9 @@ export default {
         title: "",
         uploadTime: "",
       },
+      tableList: [],
+      searchlist: [],
+      inputText: "",
       cascaded: [],
       ruleForm1: {},
       rules: {
@@ -266,6 +259,7 @@ export default {
           subTitle: "",
           title: "",
           updateTime: "",
+          isDelete:false,
         },
       ],
       selectedRows: [],
@@ -286,6 +280,8 @@ export default {
   },
   created() {
     this.getTabledata();
+    this.setSlist(this.tableData);
+    
   },
   updated() {
     for (var i = 0; i < this.tableData.length; i++) {
@@ -307,6 +303,34 @@ export default {
     },
   },
   methods: {
+    // 获取需要渲染到页面中的数据
+    setSlist(arr) {
+      this.tableList = JSON.parse(JSON.stringify(arr));
+    },
+    search() {
+      if (this.inputText) {
+        var slist = [];
+        // 过滤需要的数据
+        this.tableData.forEach((item) => {
+          // 检测搜索关键字 和 判断是否删除的数据
+          if (item.title.indexOf(this.inputText) > -1 && !item.isDelete) {
+            slist.push(item);
+          } else if(!item.isDelete){
+            this.searchlist.push(item)
+          }
+        });
+        this.setSlist(slist); // 将过滤后的数据给了tableList 
+      } else {
+        // 没有搜索内容，则展示全部数据 但是要判断是否删除的数据
+        this.searchlist = []
+        this.tableData.forEach((item) => {
+          if(!item.isDelete){
+            this.searchlist.push(item)
+            this.setSlist(this.searchlist)
+          }
+        })
+      }
+    },
     getTabledata() {
       let _that = this;
       this.$axios
@@ -498,6 +522,11 @@ export default {
 </script>
 <style>
 .button {
+  position: relative;
+  z-index: 999;
+  top: 0;
+}
+.el-button{
   position: relative;
   z-index: 999;
   top: 0;
