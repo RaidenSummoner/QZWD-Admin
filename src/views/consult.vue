@@ -1,18 +1,12 @@
 <template>
   <div>
-    
+
     <div>
-      
+
       <span>
         <el-dialog :visible.sync="dialogVisible" title="咨询">
-         <!-- 新增内容的dialog -->
-          <el-form
-            :model="ruleForm"
-            :rules="rules"
-            ref="ruleForm"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
+          <!-- 新增内容的dialog -->
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="内容标题" prop="title">
               <el-input v-model="ruleForm.title"></el-input>
             </el-form-item>
@@ -20,12 +14,8 @@
               <el-input v-model="ruleForm.subTitle"></el-input>
             </el-form-item>
             <el-form-item lable="上传图片" prop="uppicture">
-              <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
-                list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-              >
+              <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card"
+                :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
                 <i class="el-icon-plus"></i>
               </el-upload>
               <el-dialog :visible.sync="dialogVisible1">
@@ -36,111 +26,51 @@
               </p>
             </el-form-item>
             <el-form-item label="内容类目" prop="class">
-              <el-cascader
-                :options="options"
-                :props="props"
-                v-model="ruleForm.class"
-                collapse-tags
-                clearable
-              ></el-cascader>
+              <el-cascader :options="options" :props="props" v-model="ruleForm.class" collapse-tags
+                clearable></el-cascader>
             </el-form-item>
             <el-form-item label="主体内容" prop="content">
-              <el-input
-                type="textarea"
-                placeholder="请输入内容"
-                v-model="ruleForm.content"
-                maxlength="3000"
-                show-word-limit
-              ></el-input>
+              <el-input type="textarea" placeholder="请输入内容" v-model="ruleForm.content" maxlength="3000"
+                show-word-limit></el-input>
             </el-form-item>
-            
+
             <el-form-item label="关键词" prop="keyword">
-              <el-input
-                maxlength="4"
-                show-word-limit
-                v-model="ruleForm.keyword"
-                type="text"
-                style="width: 30%; float: left"
-              ></el-input>
-              <el-input
-                maxlength="4"
-                show-word-limit
-                v-model="ruleForm.keyword2"
-                type="text"
-                style="width: 30%; float: left"
-              ></el-input>
-              
-                <el-button @click="addnew">新增</el-button>
-           
+              <el-input maxlength="4" show-word-limit v-model="ruleForm.keyword" type="text"
+                style="width: 30%; float: left"></el-input>
+              <el-input maxlength="4" show-word-limit v-model="ruleForm.keyword2" type="text"
+                style="width: 30%; float: left"></el-input>
+
+              <el-button @click="addnew">新增</el-button>
+
             </el-form-item>
             <el-form-item label="相关课程" prop="desc">
-              <el-input
-                type="text"
-                v-model="ruleForm.desc"
-                style="width: 30%; float: left"
-              ></el-input>
+              <el-input type="text" v-model="ruleForm.desc" style="width: 30%; float: left"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button
-                v-if="ruleForm.iscreate === 0"
-                style="float: right"
-                type="primary"
-                @click="submitForm('ruleForm')"
-                >立即创建</el-button
-              >
+              <el-button v-if="ruleForm.iscreate === 0" style="float: right" type="primary"
+                @click="submitForm('ruleForm')">立即创建</el-button>
 
-              <el-button
-                v-if="ruleForm.iscreate === 1"
-                style="float: right"
-                type="primary"
-                @click="updateForm('ruleForm')"
-                >更改</el-button
-              >
+              <el-button v-if="ruleForm.iscreate === 1" style="float: right" type="primary"
+                @click="updateForm('ruleForm')">更改</el-button>
 
-              <el-button style="float: right" @click="resetForm('ruleForm')"
-                >重置</el-button
-              >
+              <el-button style="float: right" @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
         <el-button type="primary" @click="showDialog">+新增</el-button>
-        <el-button
-            type="primary"
-            @click="cancelSelected"
-            :disabled="selectedRows.length === 0"
-            >取消发布</el-button
-          >
-        <el-button
-            type="primary"
-            @click="publishSelected"
-            :disabled="selectedRows.length === 0"
-            >一键发布<i class="el-icon-upload el-icon--right"></i
-          ></el-button>
-          
-        <el-cascader
-          ref="myCascader"
-          :options="options"
-          :props="props"
-          collapse-tags
-          clearable
-          v-model="cascaded"
-          @change="handleChange"
-        ></el-cascader>
-        <el-input
-          v-model="inputText"
-          placeholder="请输入内容"
-          style="width: 250px" ></el-input>
-          <el-button type="primary" @click="search">搜索</el-button>
+        <el-button type="primary" @click="cancelSelected" :disabled="selectedRows.length === 0">取消发布</el-button>
+        <el-button type="primary" @click="publishSelected" :disabled="selectedRows.length === 0">一键发布<i
+            class="el-icon-upload el-icon--right"></i></el-button>
+
+        <el-cascader ref="myCascader" :options="options" :props="props" collapse-tags clearable v-model="cascaded"
+          @change="handleChange"></el-cascader>
+        <el-input v-model="inputText" placeholder="请输入内容" style="width: 250px"></el-input>
+        <el-button type="primary" @click="search">搜索</el-button>
       </span>
     </div>
-     <!-- tablelist作为筛选。。 -->
-    <el-table
-      :data="tableList" 
-      style="width: 100%"
-      :default-sort="{ prop: 'date', order: 'descending' }"
-      @selection-change="handleSelectionChange"
-      ref="table"
-    >
+    <!-- tablelist作为筛选。。 -->
+    <el-table :data="tableList" style="width: 100%" :default-sort="{ prop: 'date', order: 'descending' }"
+      @selection-change="handleSelectionChange" ref="table">
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column type="index" :index="indexMethod" width="180">
       </el-table-column>
@@ -154,30 +84,20 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            type="danger"
-            @click.native.prevent="deleteRow(scope.$index, tableList)"
-            >删除</el-button
-          >
-          <el-button size="mini" @click="handleview(scope.$index, scope.row)"
-            >预览</el-button
-          >
-          <el-button size="mini" @click="handleput(scope.$index, scope.row)"
-            >发布</el-button
-          >
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="mini" type="danger" @click.native.prevent="deleteRow(scope.$index, tableList)">删除</el-button>
+          <el-button size="mini" @click="handleview(scope.$index, scope.row)">预览</el-button>
+          <el-button size="mini" @click="handleput(scope.$index, scope.row)">发布</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
+
   </div>
 </template>
 <script>
 import form from "../components/form.vue";
 import { Dialog } from "element-ui";
+import { contentGetAll } from '../api/content'
 export default {
   data() {
     return {
@@ -196,7 +116,7 @@ export default {
         keyword: "",
         keyword2: "",
         kind: "",
-        kind_str:"",
+        kind_str: "",
         subKind: "",
         subTitle: "",
         title: "",
@@ -205,7 +125,7 @@ export default {
       tableList: [],
       searchlist: [],
       inputText: "",
-      filterText:"",
+      filterText: "",
       filterLength: -1,
       cascaded: [],
       ruleForm1: {},
@@ -273,7 +193,7 @@ export default {
           subTitle: "111",
           title: "Java开发速成",
           updateTime: "2023-04-30",
-          isDelete:false,
+          isDelete: false,
         },
         {
           content: "111",
@@ -290,7 +210,7 @@ export default {
           subTitle: "111",
           title: "C++开发速成",
           updateTime: "2023-04-29",
-          isDelete:false,
+          isDelete: false,
         },
         {
           content: "111",
@@ -307,7 +227,7 @@ export default {
           subTitle: "fdd",
           title: "111",
           updateTime: "2023-04-30",
-          isDelete:false,
+          isDelete: false,
         },
       ],
       selectedRows: [],
@@ -326,7 +246,7 @@ export default {
     }
   },
   created() {
-//    this.getTabledata();
+       this.getTabledata();
     this.setSlist(this.tableData);
   },
   updated() {
@@ -354,33 +274,33 @@ export default {
           // 检测搜索关键字 和 判断是否删除的数据
           if (item.title.indexOf(this.inputText) > -1 && this.filterLength > 0 && item.kind_str.indexOf(this.filterText) > -1 && !item.isDelete) {
             slist.push(item);
-          } else if(!item.isDelete){
+          } else if (!item.isDelete) {
             this.searchlist.push(item)
           }
         });
         this.setSlist(slist); // 将过滤后的数据给了tableList 
       }
-      else if(this.inputText){
+      else if (this.inputText) {
         var slist = [];
         // 过滤需要的数据
         this.tableData.forEach((item) => {
           // 检测搜索关键字 和 判断是否删除的数据
           if (item.title.indexOf(this.inputText) > -1 && !item.isDelete) {
             slist.push(item);
-          } else if(!item.isDelete){
+          } else if (!item.isDelete) {
             this.searchlist.push(item)
           }
         });
         this.setSlist(slist); // 将过滤后的数据给了tableList 
       }
-      else if(this.filterLength > 0){
+      else if (this.filterLength > 0) {
         var slist = [];
         // 过滤需要的数据
         this.tableData.forEach((item) => {
           // 检测搜索关键字 和 判断是否删除的数据
           if (item.kind_str.indexOf(this.filterText) > -1 && !item.isDelete) {
             slist.push(item);
-          } else if(!item.isDelete){
+          } else if (!item.isDelete) {
             this.searchlist.push(item)
           }
         });
@@ -390,7 +310,7 @@ export default {
         // 没有搜索内容，则展示全部数据 但是要判断是否删除的数据
         this.searchlist = []
         this.tableData.forEach((item) => {
-          if(!item.isDelete){
+          if (!item.isDelete) {
             this.searchlist.push(item)
             this.setSlist(this.searchlist)
           }
@@ -399,10 +319,9 @@ export default {
     },
     getTabledata() {
       let _that = this;
-      this.$axios
-        .get("test_consult.txt")
+      contentGetAll
         .then((res) => {
-          console.log(res.data.data);
+          console.log(res);
           _that.tableData = res.data.data;
         })
         .catch((err) => {
@@ -425,9 +344,9 @@ export default {
     },
     handleview(index, row) {
       this.$message({
-            message: "预览了第" + (index+1) + "项",
-            type: "success",
-          });
+        message: "预览了第" + (index + 1) + "项",
+        type: "success",
+      });
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -447,9 +366,9 @@ export default {
         row.isPost_str = "已发布";
       });
       this.$message({
-            message: "已发布选中项",
-            type: "success",
-          });
+        message: "已发布选中项",
+        type: "success",
+      });
       this.$refs.table.clearSelection(); // 清空选中行
     },
     // 一键取消选中行
@@ -461,9 +380,9 @@ export default {
         row.isPost_str = "草稿";
       });
       this.$message({
-            message: "已将选中项置于草稿状态",
-            type: "success",
-          });
+        message: "已将选中项置于草稿状态",
+        type: "success",
+      });
       this.$refs.table.clearSelection(); // 清空选中行
     },
     handleput(index, row) {
@@ -508,9 +427,9 @@ export default {
       rows.splice(index, 1);
       this.tableData[index].isDelete = 1;
       this.$message({
-            message: "已删除了对应的行",
-            type: "success",
-          });
+        message: "已删除了对应的行",
+        type: "success",
+      });
     },
     getNowDate() {
       var date = new Date();
@@ -624,11 +543,11 @@ export default {
   z-index: 999;
   top: 0;
 }
-.el-button{
+
+.el-button {
   position: relative;
   z-index: 999;
   top: 0;
 }
-
 </style>
   

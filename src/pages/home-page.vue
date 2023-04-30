@@ -11,6 +11,7 @@
 </template>
 <script>
 import Framework from '@/components/Framework.vue';
+import { contentGetAll } from '@/api/content';
   export default {
   components: { Framework },
     data() {
@@ -25,7 +26,17 @@ import Framework from '@/components/Framework.vue';
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath);
+      },
+      getContent(){
+        contentGetAll().then(res => {
+          console.log(res);
+        }).catch(err => {
+          console.log(err);
+        });
       }
+    },
+    mounted() {
+      this.getContent();
     }
   }
 

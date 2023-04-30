@@ -155,11 +155,11 @@
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column type="index" :index="indexMethod" width="180">
       </el-table-column>
-      <el-table-column prop="title" label="咨询标题" width="180">
+      <el-table-column prop="title" label="资讯标题" width="180">
       </el-table-column>
       <el-table-column prop="isPost" label="发布状态" width="180">
       </el-table-column>
-      <el-table-column prop="kind" label="咨询类目" width="180">
+      <el-table-column prop="kind" label="资讯类目" width="180">
       </el-table-column>
       <el-table-column prop="updateTime" label="日期" sortable width="180">
       </el-table-column>
