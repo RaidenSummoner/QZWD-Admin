@@ -3,7 +3,6 @@
     <el-container>
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
     <el-menu
-      @select="handleSelect"
       background-color="#545c64"
       :default-active="this.$router.path"
       text-color="#fff"

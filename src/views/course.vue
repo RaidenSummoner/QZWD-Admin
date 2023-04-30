@@ -176,7 +176,6 @@
   </div>
 </template>
 <script>
-import form from "../components/form.vue";
 import { Dialog } from "element-ui";
 export default {
   data() {
@@ -314,7 +313,7 @@ export default {
     };
   },
   mounted() {
-    this.list = this.states.map((item) => {
+    this.list = this.states?.map((item) => {
       return { value: `value:${item}`, label: `label:${item}` };
     });
     for (var i = 0; i < this.tableData.length; i++) {
@@ -345,6 +344,12 @@ export default {
     // 获取需要渲染到页面中的数据
     setSlist(arr) {
       this.tableList = JSON.parse(JSON.stringify(arr));
+    },
+    addnew(){
+      this.$message({
+            message: "add!!",
+            type: "success",
+          });
     },
     search() {
       if (this.inputText && this.filterLength > 0) {
@@ -613,7 +618,6 @@ export default {
     },
   },
   components: {
-    form,
     [Dialog.name]: Dialog,
   },
 };
