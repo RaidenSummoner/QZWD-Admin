@@ -9,10 +9,10 @@
   router
   active-text-color="#ffd04b">
   
-  <el-menu-item index="/">日历运营</el-menu-item>
+  <el-menu-item index="/calendar">日历运营</el-menu-item>
   <el-menu-item index="/category" >内容管理</el-menu-item>
-  <el-menu-item index="/">内容导入</el-menu-item>
-  <el-menu-item index="/">数据中心</el-menu-item>
+  <el-menu-item index="/contentImport">内容导入</el-menu-item>
+  <el-menu-item index="">数据中心</el-menu-item>
 </el-menu>
 </div>
 </template>

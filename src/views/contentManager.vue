@@ -3,9 +3,6 @@
     <el-row>
       <el-col :span="10">
         <!--咨询，主类目-->
-        <div>
-          <div style="text-align: left"></div>
-          <div>
             <el-table
               :data="kind_consult_1"
               highlight-current-row
@@ -13,18 +10,20 @@
               @selection-change="selsChange"
               style="width: 100%"
             >
-              <el-table-column prop="kind" label="咨询一级类目" width="120">
+            
+              <el-table-column prop="kind" label="咨询一级类目" width="120" >
               </el-table-column>
               <el-table-column label="操作" width="300">
+                
                 <template slot-scope="scope">
                   <!-- <el-button type="success" size="small" @click="handleEdit(scope.$index, scope.row)">新增</el-button> -->
-
                   <el-button
                     type="success"
                     size="small"
                     @click="addRow(kind_consult_1, 1)"
                     >新增</el-button
                   >
+                  
                   <el-button
                     type="primary"
                     size="small"
@@ -37,10 +36,13 @@
                     @click="handleDelete(scope.$index, kind_consult_1)"
                     >删除</el-button
                   >
+                  
                 </template>
+                
               </el-table-column>
+              
             </el-table>
-          </div>
+            
           <el-dialog
             :title="titleMap[dialogStatus]"
             :visible.sync="FormVisible1"
@@ -76,7 +78,6 @@
               >
             </div>
           </el-dialog>
-        </div>
       </el-col>
       <!--咨询，子类目-->
       <el-col :span="10">
@@ -110,7 +111,7 @@
                   <el-button
                     size="small"
                     type="danger"
-                    @click="handleDelete(scope.$index, users)"
+                    @click="handleDelete(scope.$index, kind_consult_2)"
                     >删除</el-button
                   >
                 </template>

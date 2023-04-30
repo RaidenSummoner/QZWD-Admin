@@ -1,20 +1,18 @@
 <template>
   <div>
+    
     <div>
+      
       <span>
-        <div class="button">
-          <el-button type="primary" @click="showDialog">+新增</el-button>
-
-          <el-button size="mini" @click="getTabledata()">ces</el-button>
-        </div>
-
         <el-dialog :visible.sync="dialogVisible" title="课程">
+         
           <el-form
             :model="ruleForm"
             :rules="rules"
             ref="ruleForm"
             label-width="100px"
-            class="demo-ruleForm">
+            class="demo-ruleForm"
+          >
             <el-form-item label="内容标题" prop="title">
               <el-input v-model="ruleForm.title"></el-input>
             </el-form-item>
@@ -55,6 +53,7 @@
                 show-word-limit
               ></el-input>
             </el-form-item>
+            
             <el-form-item label="关键词" prop="keyword">
               <el-input
                 maxlength="4"
@@ -70,12 +69,11 @@
                 type="text"
                 style="width: 30%; float: left"
               ></el-input>
-
-              <div class="button">
+              
                 <el-button @click="addnew">新增</el-button>
-              </div>
+           
             </el-form-item>
-            <el-form-item label="相关课程(0/1)" prop="desc">
+            <el-form-item label="相关课程" prop="desc">
               <el-input
                 type="text"
                 v-model="ruleForm.desc"
@@ -104,25 +102,21 @@
               >
             </el-form-item>
           </el-form>
-          <!-- <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitForm">确 定</el-button>
-          </div> -->
         </el-dialog>
-        <div class="button">
-          <el-button
+        <el-button type="primary" @click="showDialog">+新增</el-button>
+        <el-button
+            type="primary"
+            @click="cancelSelected"
+            :disabled="selectedRows.length === 0"
+            >取消发布</el-button
+          >
+        <el-button
             type="primary"
             @click="publishSelected"
             :disabled="selectedRows.length === 0"
             >一键发布<i class="el-icon-upload el-icon--right"></i
           ></el-button>
-          <el-button
-            type="primary"
-            @click="cancelSelected"
-            :disabled="selectedRows.length === 0"
-            >一键取消</el-button
-          >
-        </div>
+          
         <el-cascader
           ref="myCascader"
           :options="options"
@@ -130,22 +124,18 @@
           collapse-tags
           clearable
           v-model="cascaded"
-          @change="handelChange"
+          @change="handleChange"
         ></el-cascader>
-        <el-select v-model="value1" filterable placeholder="请输入关键词">
-          <el-option
-            v-for="item in option"
-            :key="item.value1"
-            :label="item.label"
-            :value="item.value1"
-          >
-          </el-option>
-        </el-select>
+        <el-input
+          v-model="inputText"
+          placeholder="请输入内容"
+          style="width: 250px" ></el-input>
+          <el-button type="primary" @click="search">搜索</el-button>
       </span>
     </div>
-
+    
     <el-table
-      :data="tableData"
+      :data="tableList"
       style="width: 100%"
       :default-sort="{ prop: 'date', order: 'descending' }"
       @selection-change="handleSelectionChange"
@@ -156,9 +146,9 @@
       </el-table-column>
       <el-table-column prop="title" label="课程标题" width="180">
       </el-table-column>
-      <el-table-column prop="isPost" label="发布状态" width="180">
+      <el-table-column prop="isPost_str" label="发布状态" width="180">
       </el-table-column>
-      <el-table-column prop="kind" label="课程类目" width="180">
+      <el-table-column prop="kind_str" label="课程类目" width="180">
       </el-table-column>
       <el-table-column prop="updateTime" label="日期" sortable width="180">
       </el-table-column>
@@ -170,7 +160,7 @@
           <el-button
             size="mini"
             type="danger"
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
+            @click.native.prevent="deleteRow(scope.$index, tableList)"
             >删除</el-button
           >
           <el-button size="mini" @click="handleview(scope.$index, scope.row)"
@@ -182,6 +172,7 @@
         </template>
       </el-table-column>
     </el-table>
+    
   </div>
 </template>
 <script>
@@ -201,20 +192,34 @@ export default {
         id: "",
         image: "",
         isPost: "",
+        isPost_str: "",
         keyword: "",
         keyword2: "",
         kind: "",
+        kind_str:"",
         subKind: "",
         subTitle: "",
         title: "",
         uploadTime: "",
       },
+      tableList: [],
+      searchlist: [],
+      inputText: "",
+      filterText:"",
+      filterLength: -1,
       cascaded: [],
       ruleForm1: {},
       rules: {
-        name: [
+        title: [
           { required: true, message: "请输入名称", trigger: "blur" },
           { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
+        ],
+        class: [
+          { required: true, message: "请选择类目", trigger: "blur" },
+        ],
+        content: [
+          { required: true, message: "请输入名称", trigger: "blur" },
+          { max: 3000, message: "字数超出限制", trigger: "blur" },
         ],
       },
       option: [
@@ -238,8 +243,8 @@ export default {
           ],
         },
         {
-          value: "产品",
-          label: "产品",
+          value: "开发",
+          label: "开发",
           children: [
             {
               value: "案例分享",
@@ -254,18 +259,55 @@ export default {
       ],
       tableData: [
         {
-          content: "",
-          courses: "",
-          id: "",
+          content: "111",
+          courses: "111",
+          id: "1",
           image: "",
-          isPost: "",
-          keyword: "",
-          keyword2: "",
-          kind: "",
-          subKind: "",
-          subTitle: "",
-          title: "",
-          updateTime: "",
+          isPost: "0",
+          isPost_str: "草稿",
+          keyword: "111",
+          keyword2: "111",
+          kind: "开发",
+          kind_str: "产品-行业资讯",
+          subKind: null,
+          subTitle: "111",
+          title: "Java开发速成",
+          updateTime: "2023-04-30",
+          isDelete:false,
+        },
+        {
+          content: "111",
+          courses: "111",
+          id: "1",
+          image: "",
+          isPost: "0",
+          isPost_str: "未发布",
+          keyword: "111",
+          keyword2: "111",
+          kind: "开发",
+          kind_str: "产品-行业资讯",
+          subKind: null,
+          subTitle: "111",
+          title: "C++开发速成",
+          updateTime: "2023-04-29",
+          isDelete:false,
+        },
+        {
+          content: "111",
+          courses: "111",
+          id: "1",
+          image: "",
+          isPost: "0",
+          isPost_str: "草稿",
+          keyword: "111",
+          keyword2: "111",
+          kind: "1",
+          kind_str: "开发-案例分享",
+          subKind: "111",
+          subTitle: "fdd",
+          title: "111",
+          updateTime: "2023-04-30",
+          isDelete:false,
         },
       ],
       selectedRows: [],
@@ -277,24 +319,17 @@ export default {
     });
     for (var i = 0; i < this.tableData.length; i++) {
       if (this.tableData[i].role == 0) {
-        this.tableData[i].status = "草稿";
+        this.tableData[i].isPost_str = "草稿";
       } else {
-        this.tableData[i].status = "已发布";
+        this.tableData[i].isPost_str = "已发布";
       }
     }
-    //this.getTabledata();
   },
   created() {
-    this.getTabledata();
+//    this.getTabledata();
+    this.setSlist(this.tableData);
   },
   updated() {
-    for (var i = 0; i < this.tableData.length; i++) {
-      if (this.tableData[i].role == 0) {
-        this.tableData[i].status = "草稿";
-      } else {
-        this.tableData[i].status = "已发布";
-      }
-    }
   },
   computed: {
     filtableData() {
@@ -307,10 +342,65 @@ export default {
     },
   },
   methods: {
+    // 获取需要渲染到页面中的数据
+    setSlist(arr) {
+      this.tableList = JSON.parse(JSON.stringify(arr));
+    },
+    search() {
+      if (this.inputText && this.filterLength > 0) {
+        var slist = [];
+        // 过滤需要的数据
+        this.tableData.forEach((item) => {
+          // 检测搜索关键字 和 判断是否删除的数据
+          if (item.title.indexOf(this.inputText) > -1 && this.filterLength > 0 && item.kind_str.indexOf(this.filterText) > -1 && !item.isDelete) {
+            slist.push(item);
+          } else if(!item.isDelete){
+            this.searchlist.push(item)
+          }
+        });
+        this.setSlist(slist); // 将过滤后的数据给了tableList 
+      }
+      else if(this.inputText){
+        var slist = [];
+        // 过滤需要的数据
+        this.tableData.forEach((item) => {
+          // 检测搜索关键字 和 判断是否删除的数据
+          if (item.title.indexOf(this.inputText) > -1 && !item.isDelete) {
+            slist.push(item);
+          } else if(!item.isDelete){
+            this.searchlist.push(item)
+          }
+        });
+        this.setSlist(slist); // 将过滤后的数据给了tableList 
+      }
+      else if(this.filterLength > 0){
+        var slist = [];
+        // 过滤需要的数据
+        this.tableData.forEach((item) => {
+          // 检测搜索关键字 和 判断是否删除的数据
+          if (item.kind_str.indexOf(this.filterText) > -1 && !item.isDelete) {
+            slist.push(item);
+          } else if(!item.isDelete){
+            this.searchlist.push(item)
+          }
+        });
+        this.setSlist(slist); // 将过滤后的数据给了tableList 
+      }
+      else {
+        // 没有搜索内容，则展示全部数据 但是要判断是否删除的数据
+        this.searchlist = []
+        this.tableData.forEach((item) => {
+          if(!item.isDelete){
+            this.searchlist.push(item)
+            this.setSlist(this.searchlist)
+          }
+        })
+      }
+    },
     getTabledata() {
       let _that = this;
       this.$axios
-        .get("test_course.txt")
+        .get("test_consult.txt")
         .then((res) => {
           console.log(res.data.data);
           _that.tableData = res.data.data;
@@ -333,6 +423,12 @@ export default {
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
+    handleview(index, row) {
+      this.$message({
+            message: "预览了第" + (index+1) + "项",
+            type: "success",
+          });
+    },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
@@ -347,8 +443,13 @@ export default {
       // ...
       this.selectedRows.forEach((row) => {
         row.role = 1;
-        row.status = "已发布";
+        this.isPost = 1;
+        row.isPost_str = "已发布";
       });
+      this.$message({
+            message: "已发布选中项",
+            type: "success",
+          });
       this.$refs.table.clearSelection(); // 清空选中行
     },
     // 一键取消选中行
@@ -357,24 +458,36 @@ export default {
       // ...
       this.selectedRows.forEach((row) => {
         row.role = 0;
-        row.status = "草稿";
+        row.isPost_str = "草稿";
       });
+      this.$message({
+            message: "已将选中项置于草稿状态",
+            type: "success",
+          });
       this.$refs.table.clearSelection(); // 清空选中行
     },
     handleput(index, row) {
       this.tableData[index].role = 1;
-      row.status = "已发布";
+      row.isPost_str = "已发布";
       console.log(
         index,
         this.tableData[index].role,
-        this.tableData[index].status,
+        this.tableData[index].isPost_str,
         this.tableData[index].title
       );
       console.log("已提交");
     },
-    handelChange(a) {
-      console.log(this.cascaded[0], "this");
-      console.log(this, "cascaded");
+    handleChange(a) {
+      var clength = this.cascaded.length;
+      this.filterLength = clength;
+      console.log(clength);
+      console.log(this.cascaded == null);
+      console.log(this.cascaded[0][0]);
+      console.log(this.cascaded[0][1]);
+      var filter = this.cascaded[0][0] + "-" + this.cascaded[0][1];
+      console.log(filter);
+      this.filterText = filter;
+      console.log(this.filterText);
     },
     choose() {
       tihs.filter;
@@ -393,6 +506,11 @@ export default {
     },
     deleteRow(index, rows) {
       rows.splice(index, 1);
+      this.tableData[index].isDelete = 1;
+      this.$message({
+            message: "已删除了对应的行",
+            type: "success",
+          });
     },
     getNowDate() {
       var date = new Date();
@@ -426,15 +544,15 @@ export default {
       this.getNowDate();
       this.getclass();
       this.$set(this.ruleForm1, "title", this.ruleForm.title);
-      this.$set(this.ruleForm1, "class", this.class);
-      this.$set(this.ruleForm1, "status", this.ruleForm.status);
-      this.$set(this.ruleForm1, "role", 0);
+      this.$set(this.ruleForm1, "subTitle", this.subTitle);
+      this.$set(this.ruleForm1, "isPost_str", "草稿");
+      this.$set(this.ruleForm1, "kind_str", this.class);
       this.$set(this.ruleForm1, "iscreate", 0);
-      this.$set(this.ruleForm1, "date", this.nowTime);
+      this.$set(this.ruleForm1, "updateTime", this.nowTime);
       this.tableData.push(this.ruleForm1);
       console.log(this.tableData, "table");
       console.log(this.ruleForm1.class, "classsss");
-      console.log(this.class, "class");
+      console.log(this.class, "kind_str");
       this.ruleForm1 = {};
       // this.$refs[formName].validate((valid) => {
       //   if (valid) {
@@ -447,23 +565,27 @@ export default {
       //     return false;
       //   }
       // });
+
+      this.setSlist(this.tableData);
+      this.dialogVisible = false;
     },
 
     updateForm(a) {
       this.getNowDate();
       this.getclass();
       this.$set(this.ruleForm1, "title", this.ruleForm.title);
-      this.$set(this.ruleForm1, "class", this.class);
-      this.$set(this.ruleForm1, "status", this.ruleForm.status);
+      this.$set(this.ruleForm1, "kind_str", this.class);
       this.$set(this.ruleForm1, "role", 0);
+      this.$set(this.ruleForm1, "isPost_str", "草稿");
       this.$set(this.ruleForm1, "iscreate", 0);
-      this.$set(this.ruleForm1, "date", this.nowTime);
+      this.$set(this.ruleForm1, "updateTime", this.nowTime);
       this.tableData[this.ruleForm.index].title = this.ruleForm1.title;
-      this.tableData[this.ruleForm.index].class = this.class;
-      this.tableData[this.ruleForm.index].status = this.ruleForm1.status;
+      this.tableData[this.ruleForm.index].kind_str = this.ruleForm1.kind_str;
+      this.tableData[this.ruleForm.index].isPost_str = this.ruleForm1.isPost_str;
       this.tableData[this.ruleForm.index].role = this.ruleForm1.role;
-      this.tableData[this.ruleForm.index].date = this.ruleForm1.date;
-      this.tableData[this.ruleForm.index].iscreate = this.ruleForm1.iscreate;
+      this.tableData[this.ruleForm.index].updateTime = this.ruleForm1.updateTime;
+      this.setSlist(this.tableData);
+      this.dialogVisible = false;
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -502,5 +624,11 @@ export default {
   z-index: 999;
   top: 0;
 }
+.el-button{
+  position: relative;
+  z-index: 999;
+  top: 0;
+}
+
 </style>
   
