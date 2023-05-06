@@ -44,7 +44,7 @@ export function contentPage(data){
 //发布资讯
 export function contentPublish(ids){
     return request({
-        url: `/content/post?ids=${encodeURIComponent(JSON.stringify(ids))}`,
+        url: `/content/post?ids=${ids}`,
         //资讯id数组。如果要把所有资讯都发布，传一个空数组即可。如果只发布一条资讯，则传来的数组只有一个id。如果发布多条资讯，则传含有多个id的数组
         method: 'PUT',
     })
@@ -53,7 +53,7 @@ export function contentPublish(ids){
 //取消发布资讯接口
 export function contentUnpublish(ids){
     return request({
-        url: `/content/unpost?ids=${encodeURIComponent(JSON.stringify(ids))}`,
+        url: `/content/unpost?ids=${ids}`,
         method: 'PUT',
     })
 }

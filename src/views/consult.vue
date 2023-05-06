@@ -172,7 +172,7 @@
 </template>
 <script>
 import { Dialog } from "element-ui";
-import { contentGetAll, contentAdd, contentDel } from "@/api/content";
+import { contentGetAll, contentAdd, contentDel, contentPublish, contentUnpublish, contentUpdate, contentSearch, contentById } from "@/api/content";
 export default {
   data() {
     return {
@@ -389,20 +389,36 @@ export default {
     handleSelectionChange(val) {
       this.selectedRows = val;
     },
+
     // 一键发布选中行
+    // 发送请求将选中行的状态改为已发布
     publishSelected() {
-      // 发送请求将选中行的状态改为已发布
-      // ...
-      this.selectedRows.forEach((row) => {
-        row.role = 1;
-        this.isPost = 1;
-        row.isPost_str = "已发布";
-      });
-      this.$message({
-        message: "已发布选中项",
-        type: "success",
-      });
-      this.$refs.table.clearSelection(); // 清空选中行
+
+      //将各个资讯的ID整理成一个数组
+      let ids = [];
+      for(let i=0;i<this.selectedRows.length;i++){
+        ids.push(this.selectedRows[i].id)
+      }
+      contentPublish(ids).then(res=>{
+        if(res.code == 1){
+          this.selectedRows.forEach((row) => {
+            row.role = 1;
+            this.isPost = 1;
+            row.isPost_str = "已发布";
+          });
+          this.$message({
+            message: "已发布选中项",
+            type: "success",
+          });
+          this.$refs.table.clearSelection(); // 清空选中行
+        }
+        else{
+          this.$message({
+            message: "发布失败",
+            type: "warning",
+          });
+        }
+      })
     },
     // 一键取消选中行
     cancelSelected() {
