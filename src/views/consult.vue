@@ -500,6 +500,7 @@ export default {
       this.$set(this.ruleForm1, "content", this.ruleForm.content);
       this.$set(this.ruleForm1, "keyword", this.ruleForm.keyword);
       this.$set(this.ruleForm1, "keyword2", this.ruleForm.keyword2);
+      this.$set(this.ruleForm1, "courses", this.ruleForm.courses);
       this.tableData.push(this.ruleForm1);
 
       console.log(this.ruleForm1)
@@ -585,7 +586,10 @@ export default {
       this.$set(this.ruleForm1, "updateTime", this.nowTime);
       this.$set(this.ruleForm1, "kind", this.kind);
       this.$set(this.ruleForm1, "subKind", this.subKind);
-
+      this.$set(this.ruleForm1, "content", this.ruleForm.content);
+      this.$set(this.ruleForm1, "keyword", this.ruleForm.keyword);
+      this.$set(this.ruleForm1, "keyword2", this.ruleForm.keyword2);
+      this.$set(this.ruleForm1, "courses", this.ruleForm.courses);
       //置入修改项的ID
       this.ruleForm1.id = this.tableData[this.ruleForm.index].id;
 
@@ -599,6 +603,10 @@ export default {
           this.tableData[this.ruleForm.index].isPost_str = this.ruleForm1.isPost_str;
           this.tableData[this.ruleForm.index].role = this.ruleForm1.role;
           this.tableData[this.ruleForm.index].updateTime = this.ruleForm1.updateTime;
+          this.tableData[this.ruleForm.index].content = this.ruleForm1.content;
+          this.tableData[this.ruleForm.index].keyword = this.ruleForm1.keyword;
+          this.tableData[this.ruleForm.index].keyword2 = this.ruleForm1.keyword2;
+          this.tableData[this.ruleForm.index].courses = this.ruleForm1.courses;
           this.setSlist(this.tableData);
           this.dialogVisible = false;
           this.$message({
