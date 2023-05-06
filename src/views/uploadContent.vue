@@ -1,194 +1,120 @@
 <template>
-<el-row>
-<div id="main-body">
-        <!-- 第二行包括左侧导航栏和中间主要内容 -->
-        <div id="second-line-div">
-            <!-- 左侧导航栏 -->
-            <!-- 中间主要内容 -->
-            <div id="main-content">
-                <!-- 模板下载 -->
-                <div id="template-download">
-                    <div class="main-content-text">模板下载</div>
-                    <ul id="template-ul">
-                        <li class="template-item">
-                            <div class="download-rightnow">立即下载</div>
-                            <div class="table-name">表格名称</div>
-                        </li>
-                        <li class="template-item">
-                            <div class="download-rightnow">立即下载</div>
-                            <div class="table-name">表格名称</div>
-                        </li>
-                        <li class="template-item">
-                            <div class="download-rightnow">立即下载</div>
-                            <div class="table-name">表格名称</div>
-                        </li>
-                        <li class="template-item">
-                            <div class="download-rightnow">立即下载</div>
-                            <div class="table-name">表格名称</div>
-                        </li>
-                    </ul>
-                </div>
-               
-            </div>
-            <div id="data-upload">
-                    <div class="main-content-text">数据上传</div>
-                    <div id="upload-module">上传</div>
-                    <div id="upload-prompt">*只支持上传xlsx、csv、xls类型数据</div>
-                </div>
-                <!-- 数据导入 -->
-                <div id="data-import">
-                    <div class="main-content-text">数据导入</div>
-                    <ul id="data-ul">
-                        <li>数据表1<span class="preview">预览</span><span class="delete">删除</span></li>
-                        <li>数据表1<span class="preview">预览</span><span class="delete">删除</span></li>
-                        <li>数据表1<span class="preview">预览</span><span class="delete">删除</span></li>
-                        <li>数据表1<span class="preview">预览</span><span class="delete">删除</span></li>
-                        <li>数据表1<span class="preview">预览</span><span class="delete">删除</span></li>
-                    </ul>
-                </div>
-        </div>
-        
-    </div>  
-     <!-- 数据上传 -->
-                
-</el-row>
-
+  <div class="main">
+    <h style="font-size:30px; text-align=left;">模板下载</h>
+    <el-row>
+      <el-col :lg="6" :xs="24"
+        ><el-skeleton style="width: 200px"> </el-skeleton>
+        Form：
+        <el-button> 下载 </el-button></el-col
+      >
+      <el-col :lg="6" :xs="24"
+        ><el-skeleton style="width: 200px"> </el-skeleton>
+        Form：
+        <el-button> 下载 </el-button></el-col
+      >
+      <el-col :lg="6" :xs="24"
+        ><el-skeleton style="width: 200px"> </el-skeleton>
+        Form：
+        <el-button> 下载 </el-button></el-col
+      >
+      <el-col :lg="6" :xs="24"
+        ><el-skeleton style="width: 200px"> </el-skeleton>
+        Form：
+        <el-button> 下载 </el-button></el-col
+      >
+    </el-row>
+    <br />
+    <el-row>
+      <div class="sr">
+        <span style="font-size: 30px">数据上传</span>
+        <br />
+        <el-upload action="#" list-type="picture-card" :auto-upload="false">
+          <i slot="default" class="el-icon-plus"></i>
+          <div slot="file" slot-scope="{ file }">
+            <img
+              class="el-upload-list__item-thumbnail"
+              :src="file.url"
+              alt=""
+            />
+            <span class="el-upload-list__item-actions">
+              <span
+                class="el-upload-list__item-preview"
+                @click="handlePictureCardPreview(file)"
+              >
+                <i class="el-icon-zoom-in"></i>
+              </span>
+              <span
+                v-if="!disabled"
+                class="el-upload-list__item-delete"
+                @click="handleDownload(file)"
+              >
+                <i class="el-icon-download"></i>
+              </span>
+              <span
+                v-if="!disabled"
+                class="el-upload-list__item-delete"
+                @click="handleRemove(file)"
+              >
+                <i class="el-icon-delete"></i>
+              </span>
+            </span>
+          </div>
+          <div slot="tip" class="el-upload__tip">
+            只支恃上传 xlsx csv xls 类型数据
+          </div>
+        </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="" />
+        </el-dialog>
+        <span style="font-size: 30px">数据导入</span>
+      </div>
+      <br />
+    </el-row>
+    <el-table :data="tableData" stripe style="width: 100%">
+      <el-table-column prop="name" label="名称" width="400"> </el-table-column>
+      <el-table-column>
+        <el-button size="mini" type="primary">预览</el-button>
+      <el-button size="mini" type="danger">删除</el-button>
+      </el-table-column>
+      
+    </el-table>
+  </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      tableData: [
+        {
+          name: "Datasheet1",
+        },
+        {
+          name: "Datasheet2",
+        },
+        {
+          name: "Datasheet3",
+        },
+        {
+          name: "Datasheet4",
+        },
+      ],
+    };
+  },
+};
+</script>
+
 <style>
-    *{
-        margin: 0;
-        padding: 0;
-    }
-    #first-line-div {
-        width: 100%;
-        height: 50px;
-        /* border-color: red;
-        border-style:solid;
-        border-width:5px; */
-        background-color: darkgray;
-    }
-    #logo {
-        float: left;
-        width: 150px;
-        height: 50px;
-    }
-    #navi-bar {
-        float: left;
-        height: 50px;
-        list-style: none;
-    }
-    .navi-item {
-        float: left;
-        width: 150px;
-        height: 50px;
-        text-align: center;
-        line-height: 50px;
-    }
-    #second-line-div {
-        width: 100%;
-        height: 500px;
-        
-    }
-    #left-bar {
-        float: left;
-        width: 150px;
-        height: 550px;
-        background-color: darkgray;
-    }
-    #left-bar-item {
-        width: 150px;
-        height: 50px;
-        text-align: center;
-        line-height: 50px;
-    }
-    #main-content {
-        float: left;
-        width: 800px;
-        height: 400px;
-        /* border-style: solid;
-        border-color: greenyellow; */
-    }
-    .main-content-text {
-        font-size: 16px;
-        font-weight: bold;
-        margin-left: 10px;
-        margin-top: 3px;
-    }
-    #template-download {
-        height: 170px;
-        width: 800px;
-        /* border-style: solid;
-        border-color: grey; */
-    }
-    #template-ul {
-        list-style: none;
-        margin-left: 10px;
-    }
-    .template-item {
-        float: left;
-        width: 190px;
-        height: 125px;
-        /* border-style: solid;
-        border-color: red; */
-        
-    }
-    .download-rightnow {
-        width: 170px;
-        height: 90px;
-        line-height: 100px;
-        text-align: center;
-        margin-left: 3px;
-        margin-top: 3px;
-        background-color: grey;
-        border-style: solid;
-        border-color: black;
-    }
-    .table-name {
-        width: 170px;
-        height: 10px;
-        margin-top: 3px;
-        text-align: center;
-        margin-left: 3px;
-    }
-    #data-upload {
-        height: 170px;
-        width: 800px;
-        /* border-style: solid; */
-        /* border-color: grey; */
-    }
-    #upload-module {
-        float: left;
-        height: 110px;
-        line-height: 110px;
-        text-align: center;
-        width: 150px;
-        margin-left: 10px;
-        margin-top: 3px;
-        background-color: grey;
-        border-style: solid;
-        border-color: black;
-    }
-    #upload-prompt {
-        float: left;
-        color: red;
-        margin-top: 100px;
-    }
-    #data-import {
-        height: 170px;
-        width: 800px;
-        /* border-style: solid;
-        border-color: grey; */
-    }
-    #data-ul {
-        list-style: none;
-        margin-left: 35px;
-        margin-top: 3px;
-    }
-    .preview {
-        margin-left: 500px;
-    }
-    .delete {
-        margin-left: 10px;
-        color: green;
-    }
+.main {
+  text-align: left;
+  margin-top: 5%;
+  line-height: 40px;
+}
+.el-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.sr {
+  text-align: left;
+}
 </style>

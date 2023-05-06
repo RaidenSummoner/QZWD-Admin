@@ -1,219 +1,65 @@
-
 <template>
+  <div class="zone" style="margin-top: 5%">
+    <span>
+      <el-button type="primary">一键发布</el-button>
+      <el-button>取消发布</el-button>
+      <el-button icon="el-icon-search" style="float: right"></el-button>
+      <el-input
+        placeholder="请输入内容"
+        style="width: 12%; float: right"
+      ></el-input>
 
-     <div id="main-body">
-        <br>
-        <div id="second-line-div">
-            <!-- 中间主要内容 -->
-            <div id="main-content">
-                <!-- 功能条 -->
-                <div id="function-bar">
-                    <div class="publish-button" style="background-color: rgb(5, 164, 218);color: white;">一键发布</div>
-                    <div class="publish-button" style="border-color: black;border-style:solid;box-sizing: border-box;">取消发布</div>
-                    <select class="select-button" style="margin-left: 260px;">
-                        <option>资讯</option>
-                    </select>
-                    <input type="text" value="请输入关键词" class="select-button" style="margin-left:10px">
-                </div>
-                <!-- 列表项 -->
-                <ul id="list">
-                    <li class="list-item">
-                        <div class="square-box"></div>
-                        <div class="data-table-name">数据表名称</div>
-                        <div class="resource-type">资源类型</div>
-                        <div class="import-data">导入日期</div>
-                        <div class="operation">操作</div>
-                    </li>
-                    <li class="list-item">
-                        <div class="square-box"></div>
-                        <div class="data-table-name">表一</div>
-                        <div class="resource-type">资源or课程</div>
-                        <div class="import-data">2022-11-21 17:50</div>
-                        <div class="operation">
-                            <span>发布</span><span style="color: red;">&nbsp;删除</span><span>&nbsp;预览</span>
-                        </div>
-                    </li>
-                    <li class="list-item">
-                        <div class="square-box"></div>
-                        <div class="data-table-name">表一</div>
-                        <div class="resource-type">资源or课程</div>
-                        <div class="import-data">2022-11-21 17:50</div>
-                        <div class="operation">
-                            <span>发布</span><span style="color: red;">&nbsp;删除</span><span>&nbsp;预览</span>
-                        </div>
-                    </li>
-                    <li class="list-item">
-                        <div class="square-box"></div>
-                        <div class="data-table-name">表一</div>
-                        <div class="resource-type">资源or课程</div>
-                        <div class="import-data">2022-11-21 17:50</div>
-                        <div class="operation">
-                            <span>发布</span><span style="color: red;">&nbsp;删除</span><span>&nbsp;预览</span>
-                        </div>
-                    </li>
-                    <li class="list-item">
-                        <div class="square-box"></div>
-                        <div class="data-table-name">表一</div>
-                        <div class="resource-type">资源or课程</div>
-                        <div class="import-data">2022-11-21 17:50</div>
-                        <div class="operation">取消发布</div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+      <el-select style="float: right" placeholder="请选择"> </el-select>
+    </span>
+    <br />
+    <br />
+    <br />
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column type="selection" width="55"> </el-table-column>
+      <el-table-column prop="name" label="数据表名称" width="180">
+      </el-table-column>
+      <el-table-column prop="address" label="资源类型" width="180">
+      </el-table-column>
+      <el-table-column prop="date" label="日期" width="240"> </el-table-column>
+
+      <el-table-column label="操作">
+        <template>
+          <el-button size="mini" type="success">发布</el-button>
+          <el-button size="mini" type="danger">删除</el-button>
+          <el-button size="mini" type="primary">预览</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      tableData: [
+        {
+          date: "2014-05-04 22:11",
+          name: "Form1",
+          address: "咨询",
+        },
+        {
+          date: "2017-05-04 22:11",
+          name: "Form2",
+          address: "咨询",
+        },
+        {
+          date: "2019-05-01 12:09",
+          name: "Form3",
+          address: "课程",
+        },
+      ],
+    };
+  },
+};
+</script>
 <style>
-    *{
-        margin: 0;
-        padding: 0;
-    }
-    #main-body {
-        width: 1000px;
-        height: 600px;
-    }
-    #first-line-div {
-        width: 100%;
-        height: 50px;
-        /* border-color: red;
-        border-style:solid;
-        border-width:5px; */
-        background-color: darkgray;
-    }
-    #logo {
-        float: left;
-        width: 150px;
-        height: 50px;
-    }
-    #navi-bar {
-        float: left;
-        height: 50px;
-        list-style: none;
-    }
-    #navi-item {
-        float: left;
-        width: 150px;
-        height: 50px;
-        text-align: center;
-        line-height: 50px;
-    }
-    #second-line-div {
-        width: 100%;
-        height: 500px;
-        
-    }
-    #left-bar {
-        float: left;
-        width: 150px;
-        height: 550px;
-        background-color: darkgray;
-    }
-    #left-bar-item {
-        width: 150px;
-        height: 50px;
-        text-align: center;
-        line-height: 50px;
-    }
-    #main-content {
-        float: left;
-        width: 830px;
-        height: 400px;
-        /* border-style: solid;
-        border-color: greenyellow; */
-    }
-    #function-bar {
-        width: 830px;
-        height: 50px;
-        /* border-style: solid;
-        border-color: grey; */
-    }
-    .publish-button {
-        float: left;
-        height: 30px;
-        line-height: 30px;
-        width: 120px;
-        text-align: center;
-        margin-top: 20px;
-        margin-left: 10px;
-        border-radius: 8px;
-
-    }
-    .select-button {
-        float: left;
-        height: 30px;
-        width: 120px;
-        margin-top: 20px;
-    }
-    #search-icon {
-        height: 30px;
-        width: 30px;
-        margin-top: 20px;
-    }
-    #list {
-        list-style: none;
-        height: 300px;
-        width: 830px;
-        /* border-color: red;
-        border-style:solid; */
-    }
-    .list-item {
-        height: 40px;
-        width: 800px;
-        margin-top: 5px;
-        margin-left: 10px;        
-        background-color: rgb(215, 215, 215);
-    }
-    .square-box {
-        float: left;
-        height: 20px;
-        width: 20px;
-        margin-left: 10px;
-        margin-top: 9px;
-        background-color: white;
-        border-style: solid;
-    }
-    .data-table-name {
-        float: left;
-        height: 30px;
-        line-height: 30px;
-        width: 180px;
-        margin-left: 3px;
-        margin-top: 3px;
-        text-align: center;
-        /* border-color: red;
-        border-style:solid; */
-    }
-    .resource-type {
-        float: left;
-        height: 30px;
-        line-height: 30px;
-        width: 180px;
-        margin-top: 3px;
-        margin-left: 3px;
-        text-align: center;
-        /* border-color: red;
-        border-style:solid; */
-    }
-    .import-data {
-        float: left;
-        height: 30px;
-        line-height: 30px;
-        width: 180px;
-        margin-top: 3px;
-        margin-left: 3px;
-        text-align: center;
-        /* border-color: red;
-        border-style:solid; */
-    }
-    .operation {
-        float: left;
-        height: 30px;
-        line-height: 30px;
-        width: 180px;
-        margin-top: 3px;
-        margin-left: 3px;
-        text-align: center;
-        /* border-color: red;
-        border-style:solid; */
-    }
+.zone {
+  line-height: 15px;
+  text-align: left;
+}
 </style>
