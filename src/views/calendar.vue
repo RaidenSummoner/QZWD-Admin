@@ -2,8 +2,8 @@
   <el-container>
     <div style="margin-top: 5%">
       <div class="zone1">
-        <span>日历运营查询</span>
-        <el-row gutter="180">
+        <span style="font-size:30px">日历运营查询</span>
+        <el-row gutter="49">
           <el-col :span="12">
             事项名称
             <el-input
@@ -23,7 +23,6 @@
             >
             </el-date-picker>
           </el-col>
-          <el-row>
             <el-col :span="12">
               关联课程
               <el-input
@@ -49,13 +48,14 @@
                 </el-option>
               </el-select>
             </el-col>
-          </el-row>
-          <span class="buttons">
+          
+        </el-row>
+        <div class="buttons">
             <el-button>重置</el-button>
             <el-button type="primary">查询</el-button>
-          </span>
-        </el-row>
+        </div>
       </div>
+      <br>
       <div class="zone2">
         <el-button type="primary" size="mini">+新增</el-button>
         <el-button type="primary" size="mini">一键提交</el-button>
@@ -169,15 +169,18 @@ export default {
 <style>
 .zone1 {
   line-height: 50px;
-  text-align: center;
   margin-left: 2%;
-  width: 1300px;
-  
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 .zone2 {
   line-height: 50px;
   text-align: left;
   margin-left: 2%;
-  width: 1300px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+.buttons{
+    text-align: right;
 }
 </style>
