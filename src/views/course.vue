@@ -4,7 +4,7 @@
       <span>
         <el-dialog :visible.sync="dialogVisible" title="课程">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="内容标题" prop="title">
+            <el-form-item label="课程标题" prop="title">
               <el-input v-model="ruleForm.title"></el-input>
             </el-form-item>
             <el-form-item label="短标题" prop="subTitle">
@@ -36,9 +36,6 @@
               <el-input maxlength="4" show-word-limit v-model="ruleForm.keyword2" type="text"
                 style="width: 30%; float: left"></el-input>
               <el-button @click="addnew">新增</el-button>
-            </el-form-item>
-            <el-form-item label="相关课程" prop="courses">
-              <el-input type="text" v-model="ruleForm.courses" style="width: 30%; float: left"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button v-if="ruleForm.iscreate === 0" style="float: right" type="primary"
@@ -87,7 +84,7 @@
 </template>
 <script>
 import { Dialog } from "element-ui";
-import { contentGetAll, lessonAdd, lessonDel, lessonPublish, lessonUnpublish, lessonPage, lessonById } from "@/api/lesson";
+import { contentGetAll, lessonAdd, lessonDel, lessonPublish, lessonUnpublish, lessonPage, lessonById, lessonUpdate} from "@/api/lesson";
 export default {
   data() {
     return {
@@ -468,6 +465,7 @@ export default {
 
     handleEdit(index, row) {
       this.tableData[index].iscreate = 1;
+      this.ruleForm.class = null;
       this.ruleForm.iscreate = this.tableData[index].iscreate;
       this.ruleForm.index = index;
       /*Give value to dialog!!! */

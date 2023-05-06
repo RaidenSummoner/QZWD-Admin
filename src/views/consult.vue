@@ -473,6 +473,8 @@ export default {
       this.tableData[index].iscreate = 1;
       this.ruleForm.iscreate = this.tableData[index].iscreate;
       this.ruleForm.index = index;
+      console.log(this.ruleForm.class);
+      this.ruleForm.class = null;
       /*Give value to dialog!!! */
       this.ruleForm.title = this.tableData[index].title;
       this.ruleForm.kind = this.tableData[index].kind;
