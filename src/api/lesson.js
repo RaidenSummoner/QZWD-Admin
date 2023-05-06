@@ -57,3 +57,12 @@ export function lessonPage(data){
         data
     })
 }
+
+//更新课程
+export function lessonUpdate(data){
+    return request({
+        url: '/lesson/update',
+        method: 'PUT',
+        data
+    })
+}
