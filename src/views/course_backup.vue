@@ -1,8 +1,11 @@
 <template>
   <div>
+
     <div>
+
       <span>
         <el-dialog :visible.sync="dialogVisible" title="课程">
+
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="内容标题" prop="title">
               <el-input v-model="ruleForm.title"></el-input>
@@ -30,21 +33,26 @@
               <el-input type="textarea" placeholder="请输入内容" v-model="ruleForm.content" maxlength="3000"
                 show-word-limit></el-input>
             </el-form-item>
+
             <el-form-item label="关键词" prop="keyword">
               <el-input maxlength="4" show-word-limit v-model="ruleForm.keyword" type="text"
                 style="width: 30%; float: left"></el-input>
               <el-input maxlength="4" show-word-limit v-model="ruleForm.keyword2" type="text"
                 style="width: 30%; float: left"></el-input>
+
               <el-button @click="addnew">新增</el-button>
+
             </el-form-item>
-            <el-form-item label="相关课程" prop="courses">
-              <el-input type="text" v-model="ruleForm.courses" style="width: 30%; float: left"></el-input>
+            <el-form-item label="相关课程" prop="desc">
+              <el-input type="text" v-model="ruleForm.desc" style="width: 30%; float: left"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button v-if="ruleForm.iscreate === 0" style="float: right" type="primary"
                 @click="submitForm('ruleForm')">立即创建</el-button>
+
               <el-button v-if="ruleForm.iscreate === 1" style="float: right" type="primary"
                 @click="updateForm('ruleForm')">更改</el-button>
+
               <el-button style="float: right" @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
           </el-form>
@@ -83,11 +91,12 @@
         </template>
       </el-table-column>
     </el-table>
+
   </div>
 </template>
 <script>
 import { Dialog } from "element-ui";
-import { contentGetAll, lessonAdd, lessonDel, lessonPublish, lessonUnpublish, lessonPage, lessonById } from "@/api/lesson";
+import { contentGetAll } from "../api/lesson"
 export default {
   data() {
     return {
@@ -113,7 +122,6 @@ export default {
         uploadTime: "",
       },
       tableList: [],
-      tableData: [],
       searchlist: [],
       inputText: "",
       filterText: "",
@@ -121,8 +129,13 @@ export default {
       cascaded: [],
       ruleForm1: {},
       rules: {
-        title: [{ required: true, message: "请输入名称", trigger: "blur" }],
-        class: [{ required: true, message: "请选择类目", trigger: "blur" }],
+        title: [
+          { required: true, message: "请输入名称", trigger: "blur" },
+          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
+        ],
+        class: [
+          { required: true, message: "请选择类目", trigger: "blur" },
+        ],
         content: [
           { required: true, message: "请输入名称", trigger: "blur" },
           { max: 3000, message: "字数超出限制", trigger: "blur" },
@@ -163,6 +176,59 @@ export default {
           ],
         },
       ],
+      tableData: [
+        {
+          content: "111",
+          courses: "111",
+          id: "1",
+          image: "",
+          isPost: "0",
+          isPost_str: "草稿",
+          keyword: "111",
+          keyword2: "111",
+          kind: "开发",
+          kind_str: "产品-行业资讯",
+          subKind: null,
+          subTitle: "111",
+          title: "Java开发速成",
+          updateTime: "2023-04-30",
+          isDelete: false,
+        },
+        {
+          content: "111",
+          courses: "111",
+          id: "1",
+          image: "",
+          isPost: "0",
+          isPost_str: "未发布",
+          keyword: "111",
+          keyword2: "111",
+          kind: "开发",
+          kind_str: "产品-行业资讯",
+          subKind: null,
+          subTitle: "111",
+          title: "C++开发速成",
+          updateTime: "2023-04-29",
+          isDelete: false,
+        },
+        {
+          content: "111",
+          courses: "111",
+          id: "1",
+          image: "",
+          isPost: "0",
+          isPost_str: "草稿",
+          keyword: "111",
+          keyword2: "111",
+          kind: "1",
+          kind_str: "开发-案例分享",
+          subKind: "111",
+          subTitle: "fdd",
+          title: "111",
+          updateTime: "2023-04-30",
+          isDelete: false,
+        },
+      ],
       selectedRows: [],
     };
   },
@@ -180,10 +246,11 @@ export default {
   },
   created() {
     //    this.getTabledata();
-    this.getContent();
+    this.getLessons()
     this.setSlist(this.tableData);
   },
-  updated() { },
+  updated() {
+  },
   computed: {
     filtableData() {
       return this.tableData.filter((p) => {
@@ -195,34 +262,13 @@ export default {
     },
   },
   methods: {
-    updateStatus() {
-      for (var i = 0; i < this.tableData.length; i++) {
-        if (this.tableData[i].isPost == 0) {
-          this.tableData[i].isPost_str = "草稿";
-        } else {
-          this.tableData[i].isPost_str = "已发布";
-        }
-      }
-      for (var i = 0; i < this.tableList.length; i++) {
-        if (this.tableList[i].isPost == 0) {
-          this.tableList[i].isPost_str = "草稿";
-        } else {
-          this.tableList[i].isPost_str = "已发布";
-        }
-      }
-    },
-    getKind() {
-      var kindString;
-      for (var i = 0; i < this.tableData.length; i++) {
-        kindString = this.tableData[i].kind + "-" + this.tableData[i].subKind;
-        console.log(kindString);
-        this.tableData[i].kind_str = kindString;
-      }
-      for (var i = 0; i < this.tableList.length; i++) {
-        kindString = this.tableList[i].kind + "-" + this.tableList[i].subKind;
-        console.log(kindString);
-        this.tableList[i].kind_str = kindString;
-      }
+    getLessons() {
+      contentGetAll({
+        page: 1,
+        pageSize: 999
+      }).then(res => {
+        console.log(res.data.records)
+      })
     },
     // 获取需要渲染到页面中的数据
     setSlist(arr) {
@@ -240,19 +286,15 @@ export default {
         // 过滤需要的数据
         this.tableData.forEach((item) => {
           // 检测搜索关键字 和 判断是否删除的数据
-          if (
-            item.title.indexOf(this.inputText) > -1 &&
-            this.filterLength > 0 &&
-            item.kind_str.indexOf(this.filterText) > -1 &&
-            !item.isDelete
-          ) {
+          if (item.title.indexOf(this.inputText) > -1 && this.filterLength > 0 && item.kind_str.indexOf(this.filterText) > -1 && !item.isDelete) {
             slist.push(item);
           } else if (!item.isDelete) {
-            this.searchlist.push(item);
+            this.searchlist.push(item)
           }
         });
-        this.setSlist(slist); // 将过滤后的数据给了tableList
-      } else if (this.inputText) {
+        this.setSlist(slist); // 将过滤后的数据给了tableList 
+      }
+      else if (this.inputText) {
         var slist = [];
         // 过滤需要的数据
         this.tableData.forEach((item) => {
@@ -260,11 +302,12 @@ export default {
           if (item.title.indexOf(this.inputText) > -1 && !item.isDelete) {
             slist.push(item);
           } else if (!item.isDelete) {
-            this.searchlist.push(item);
+            this.searchlist.push(item)
           }
         });
-        this.setSlist(slist); // 将过滤后的数据给了tableList
-      } else if (this.filterLength > 0) {
+        this.setSlist(slist); // 将过滤后的数据给了tableList 
+      }
+      else if (this.filterLength > 0) {
         var slist = [];
         // 过滤需要的数据
         this.tableData.forEach((item) => {
@@ -272,281 +315,21 @@ export default {
           if (item.kind_str.indexOf(this.filterText) > -1 && !item.isDelete) {
             slist.push(item);
           } else if (!item.isDelete) {
-            this.searchlist.push(item);
+            this.searchlist.push(item)
           }
         });
-        this.setSlist(slist); // 将过滤后的数据给了tableList
-      } else {
+        this.setSlist(slist); // 将过滤后的数据给了tableList 
+      }
+      else {
         // 没有搜索内容，则展示全部数据 但是要判断是否删除的数据
-        this.searchlist = [];
+        this.searchlist = []
         this.tableData.forEach((item) => {
           if (!item.isDelete) {
-            this.searchlist.push(item);
-            this.setSlist(this.searchlist);
+            this.searchlist.push(item)
+            this.setSlist(this.searchlist)
           }
-        });
-      }
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handleview(index, row) {
-      this.$message({
-        message: "预览了第" + (index + 1) + "项",
-        type: "success",
-      });
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
-
-    handleSelectionChange(val) {
-      this.selectedRows = val;
-    },
-
-    // 一键发布选中行
-    // 发送请求将选中行的状态改为已发布
-    publishSelected() {
-
-      //将各个课程的ID整理成一个数组
-      let ids = [];
-      for (let i = 0; i < this.selectedRows.length; i++) {
-        ids.push(this.selectedRows[i].id)
-      }
-      lessonPublish(ids).then(res => {
-        if (res.code == 1) {
-          this.selectedRows.forEach((row) => {
-            row.role = 1;
-            this.isPost = 1;
-            row.isPost_str = "已发布";
-          });
-          this.$message({
-            message: "已发布选中项",
-            type: "success",
-          });
-          this.$refs.table.clearSelection(); // 清空选中行
-        }
-        else {
-          this.$message({
-            message: "发布失败",
-            type: "warning",
-          });
-        }
-      })
-    },
-    // 一键取消选中行
-    cancelSelected() {
-      // 发送请求将选中行的状态改为未发布
-
-      //将各个课程的ID整理成一个数组
-      let ids = [];
-      for (let i = 0; i < this.selectedRows.length; i++) {
-        ids.push(this.selectedRows[i].id)
-      }
-      //发送取消发布请求
-      lessonUnpublish(ids).then(res => {
-        if (res.code == 1) {
-          this.selectedRows.forEach((row) => {
-            row.role = 0;
-            row.isPost_str = "草稿";
-          });
-          this.$message({
-            message: "已将选中项置于草稿状态",
-            type: "success",
-          });
-          this.$refs.table.clearSelection(); // 清空选中行
-        }
-        else {
-          this.$message({
-            message: "取消发布失败",
-            type: "warning",
-          });
-        }
-      })
-
-    },
-
-    //单条发布
-    handleput(index, row) {
-      //发送发布请求
-      lessonPublish(row.id).then(res => {
-        if (res.code == 1) {
-          this.$message({
-            message: "发布成功",
-            type: "success",
-          });
-          this.tableData[index].role = 1;
-          this.tableData[index].isPost_str = "已发布";
-          console.log(
-            index,
-            this.tableData[index].role,
-            this.tableData[index].isPost_str,
-            this.tableData[index].title
-          );
-          console.log("已提交");
-        }
-        else {
-          this.$message({
-            message: "发布失败",
-            type: "warning",
-          });
-        }
-      })
-
-    },
-    handleChange(a) {
-      var clength = this.cascaded.length;
-      this.filterLength = clength;
-      var filter = this.cascaded[0][0] + "-" + this.cascaded[0][1];
-      this.filterText = filter;
-    },
-    choose() {
-      tihs.filter;
-    },
-    getCheckedNodes() {
-      console.log(this.cascaded, "e");
-    },
-    indexMethod(index) {
-      return index + 1;
-    },
-    deleteRow(index, rows) {
-      console.log("删除ID：", rows[index].id)
-      lessonDel(rows[index].id).then(res => {
-        if (res.code == 1) {
-          rows.splice(index, 1);
-          this.tableData[index].isDelete = 1;
-          this.$message({
-            message: "已删除了对应的行",
-            type: "success",
-          });
-        }
-        else {
-          this.$message({
-            message: "删除失败",
-            type: "warning",
-          });
-        }
-      })
-    },
-    getNowDate() {
-      var date = new Date();
-      var sign2 = ":";
-      var year = date.getFullYear(); // 年
-      var month = date.getMonth() + 1; // 月
-      var day = date.getDate(); // 日
-      var time = date.toLocaleTimeString();
-      var weekArr = [
-        "星期一",
-        "星期二",
-        "星期三",
-        "星期四",
-        "星期五",
-        "星期六",
-        "星期天",
-      ];
-      var week = weekArr[date.getDay()];
-      // 给一位数的数据前面加 “0”
-      if (month >= 1 && month <= 9) {
-        month = "0" + month;
-      }
-      if (day >= 0 && day <= 9) {
-        day = "0" + day;
-      }
-      this.nowTime = year + "-" + month + "-" + day + " " + time;
-    },
-    getclass() {
-
-      console.log(this.ruleForm.class[0]);
-      this.class = this.ruleForm.class[0][0] + "-" + this.ruleForm.class[0][1];
-      this.kind = this.ruleForm.class[0][0];
-      this.subKind = this.ruleForm.class[0][1];
-      console.log(this.ruleForm.class[0][0]);
-      console.log(this.ruleForm.class[0][1]);
-    },
-    pushFormClass() { },
-
-    handleEdit(index, row) {
-      this.tableData[index].iscreate = 1;
-      this.ruleForm.iscreate = this.tableData[index].iscreate;
-      this.ruleForm.index = index;
-      /*Give value to dialog!!! */
-      this.ruleForm.title = this.tableData[index].title;
-      this.ruleForm.kind = this.tableData[index].kind;
-      this.ruleForm.subKind = this.tableData[index].subKind;
-      this.ruleForm.subTitle = this.tableData[index].subTitle;
-      this.ruleForm.content = this.tableData[index].content;
-      this.ruleForm.courses = this.tableData[index].courses;
-      this.ruleForm.keyword = this.tableData[index].keyword;
-      this.ruleForm.keyword2 = this.tableData[index].keyword2;
-      this.dialogVisible = true;
-    },
-
-    //新增课程页，立即创建按钮
-    submitForm(formName) {
-      this.getNowDate();
-      this.$set(this.ruleForm1, "updateTime", this.nowTime);
-      this.getclass();
-      this.$set(this.ruleForm1, "title", this.ruleForm.title);
-      this.$set(this.ruleForm1, "subTitle", this.ruleForm.subTitle);
-      this.$set(this.ruleForm1, "kind", this.kind);
-      this.$set(this.ruleForm1, "subKind", this.subKind);
-      this.$set(this.ruleForm1, "isPost_str", "草稿");
-      this.$set(this.ruleForm1, "kind_str", this.class);
-      this.$set(this.ruleForm1, "iscreate", 0);
-      this.$set(this.ruleForm1, "content", this.ruleForm.content);
-      this.$set(this.ruleForm1, "keyword", this.ruleForm.keyword);
-      this.$set(this.ruleForm1, "keyword2", this.ruleForm.keyword2);
-      this.$set(this.ruleForm1, "courses", this.ruleForm.courses);
-      this.tableData.push(this.ruleForm1);
-
-      console.log(this.ruleForm1)
-      //发送新增课程请求
-      lessonAdd(this.ruleForm1).then(res => {
-        console.log(res)  //请求结果
-        if (res.code == 1) {
-          this.ruleForm1 = {};
-          this.setSlist(this.tableData);
-          this.dialogVisible = false;
-          this.resetForm("ruleForm");
-          this.resetForm("ruleForm1");
-        }
-        else {
-          console.log("新增失败")
-        }
-      })
-      // console.log(this.tableData, "table");
-      // console.log(this.ruleForm1.class, "classsss");
-      // console.log(this.class, "kind_str");
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     alert("submit!");
-      //     console.log(formName);
-      //     this.tableData.push(formName);
-      //   } else {
-      //     this.tableData.push(formName);
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
-
-    },
-    getContent() {
-      contentGetAll({
-        page: 1,
-        pageSize: 999
-      }).then((res) => {
-          console.log(res);
-          console.log(res.data.records)
-          this.tableData = res.data.records;
-          this.tableList = res.data.records;
-          console.log(this.tableData.length);
-          this.updateStatus();
-          this.getKind();
         })
-        .catch((err) => {
-          console.log(err);
-        });
+      }
     },
     getTabledata() {
       let _that = this;
@@ -571,81 +354,177 @@ export default {
       //     _this.tableData=resp.data;
       // })
     },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handleview(index, row) {
+      this.$message({
+        message: "预览了第" + (index + 1) + "项",
+        type: "success",
+      });
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
 
-    //修改课程页，更改按钮
+    handleSelectionChange(val) {
+      this.selectedRows = val;
+    },
+    // 一键发布选中行
+    publishSelected() {
+      // 发送请求将选中行的状态改为已发布
+      // ...
+      this.selectedRows.forEach((row) => {
+        row.role = 1;
+        this.isPost = 1;
+        row.isPost_str = "已发布";
+      });
+      this.$message({
+        message: "已发布选中项",
+        type: "success",
+      });
+      this.$refs.table.clearSelection(); // 清空选中行
+    },
+    // 一键取消选中行
+    cancelSelected() {
+      // 发送请求将选中行的状态改为未发布
+      // ...
+      this.selectedRows.forEach((row) => {
+        row.role = 0;
+        row.isPost_str = "草稿";
+      });
+      this.$message({
+        message: "已将选中项置于草稿状态",
+        type: "success",
+      });
+      this.$refs.table.clearSelection(); // 清空选中行
+    },
+    handleput(index, row) {
+      this.tableData[index].role = 1;
+      row.isPost_str = "已发布";
+      console.log(
+        index,
+        this.tableData[index].role,
+        this.tableData[index].isPost_str,
+        this.tableData[index].title
+      );
+      console.log("已提交");
+    },
+    handleChange(a) {
+      var clength = this.cascaded.length;
+      this.filterLength = clength;
+      console.log(clength);
+      console.log(this.cascaded == null);
+      console.log(this.cascaded[0][0]);
+      console.log(this.cascaded[0][1]);
+      var filter = this.cascaded[0][0] + "-" + this.cascaded[0][1];
+      console.log(filter);
+      this.filterText = filter;
+      console.log(this.filterText);
+    },
+    choose() {
+      tihs.filter;
+    },
+    getCheckedNodes() {
+      console.log(this.cascaded, "e");
+    },
+    handleEdit(index, row) {
+      this.tableData[index].iscreate = 1;
+      this.ruleForm.iscreate = this.tableData[index].iscreate;
+      this.ruleForm.index = index;
+      this.dialogVisible = true;
+    },
+    indexMethod(index) {
+      return index + 1;
+    },
+    deleteRow(index, rows) {
+      rows.splice(index, 1);
+      this.tableData[index].isDelete = 1;
+      this.$message({
+        message: "已删除了对应的行",
+        type: "success",
+      });
+    },
+    getNowDate() {
+      var date = new Date();
+      var sign2 = ":";
+      var year = date.getFullYear(); // 年
+      var month = date.getMonth() + 1; // 月
+      var day = date.getDate(); // 日
+      var weekArr = [
+        "星期一",
+        "星期二",
+        "星期三",
+        "星期四",
+        "星期五",
+        "星期六",
+        "星期天",
+      ];
+      var week = weekArr[date.getDay()];
+      // 给一位数的数据前面加 “0”
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (day >= 0 && day <= 9) {
+        day = "0" + day;
+      }
+      this.nowTime = year + "-" + month + "-" + day;
+    },
+    getclass() {
+      this.class = this.ruleForm.class[0][0] + "-" + this.ruleForm.class[0][1];
+    },
+    submitForm(formName) {
+      this.getNowDate();
+      this.getclass();
+      this.$set(this.ruleForm1, "title", this.ruleForm.title);
+      this.$set(this.ruleForm1, "subTitle", this.subTitle);
+      this.$set(this.ruleForm1, "isPost_str", "草稿");
+      this.$set(this.ruleForm1, "kind_str", this.class);
+      this.$set(this.ruleForm1, "iscreate", 0);
+      this.$set(this.ruleForm1, "updateTime", this.nowTime);
+      this.tableData.push(this.ruleForm1);
+      console.log(this.tableData, "table");
+      console.log(this.ruleForm1.class, "classsss");
+      console.log(this.class, "kind_str");
+      this.ruleForm1 = {};
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //     alert("submit!");
+      //     console.log(formName);
+      //     this.tableData.push(formName);
+      //   } else {
+      //     this.tableData.push(formName);
+      //     console.log("error submit!!");
+      //     return false;
+      //   }
+      // });
+
+      this.setSlist(this.tableData);
+      this.dialogVisible = false;
+    },
+
     updateForm(a) {
       this.getNowDate();
       this.getclass();
-      console.log(this.ruleForm)
       this.$set(this.ruleForm1, "title", this.ruleForm.title);
       this.$set(this.ruleForm1, "kind_str", this.class);
       this.$set(this.ruleForm1, "role", 0);
       this.$set(this.ruleForm1, "isPost_str", "草稿");
       this.$set(this.ruleForm1, "iscreate", 0);
       this.$set(this.ruleForm1, "updateTime", this.nowTime);
-      this.$set(this.ruleForm1, "kind", this.kind);
-      this.$set(this.ruleForm1, "subKind", this.subKind);
-      this.$set(this.ruleForm1, "content", this.ruleForm.content);
-      this.$set(this.ruleForm1, "keyword", this.ruleForm.keyword);
-      this.$set(this.ruleForm1, "keyword2", this.ruleForm.keyword2);
-      this.$set(this.ruleForm1, "courses", this.ruleForm.courses);
-      //置入修改项的ID
-      this.ruleForm1.id = this.tableData[this.ruleForm.index].id;
-
-      //发送修改请求
-      console.log(this.ruleForm1)
-      lessonUpdate(this.ruleForm1).then(res => {
-        console.log(res)
-        if (res.code == 1) {
-          this.tableData[this.ruleForm.index].title = this.ruleForm1.title;
-          this.tableData[this.ruleForm.index].kind_str = this.ruleForm1.kind_str;
-          this.tableData[this.ruleForm.index].isPost_str = this.ruleForm1.isPost_str;
-          this.tableData[this.ruleForm.index].role = this.ruleForm1.role;
-          this.tableData[this.ruleForm.index].updateTime = this.ruleForm1.updateTime;
-          this.tableData[this.ruleForm.index].content = this.ruleForm1.content;
-          this.tableData[this.ruleForm.index].keyword = this.ruleForm1.keyword;
-          this.tableData[this.ruleForm.index].keyword2 = this.ruleForm1.keyword2;
-          this.tableData[this.ruleForm.index].courses = this.ruleForm1.courses;
-          this.setSlist(this.tableData);
-          this.dialogVisible = false;
-          this.$message({
-            message: "修改成功",
-            type: "success",
-          });
-        }
-        else {
-          this.$message({
-            message: "修改失败",
-            type: "warning",
-          });
-        }
-      })
+      this.tableData[this.ruleForm.index].title = this.ruleForm1.title;
+      this.tableData[this.ruleForm.index].kind_str = this.ruleForm1.kind_str;
+      this.tableData[this.ruleForm.index].isPost_str = this.ruleForm1.isPost_str;
+      this.tableData[this.ruleForm.index].role = this.ruleForm1.role;
+      this.tableData[this.ruleForm.index].updateTime = this.ruleForm1.updateTime;
+      this.setSlist(this.tableData);
+      this.dialogVisible = false;
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.ruleForm.title = null;
-      this.ruleForm.subTitle = null;
-      this.ruleForm.content = null;
-      this.ruleForm.courses = null;
-      //   this.ruleForm.class = null;
-      this.ruleForm.keyword = null;
-      this.ruleForm.keyword2 = null;
-    },
-    resetForm1(formName) {
-      this.$refs[formName].resetFields();
-    },
-    getLength() {
-      console.log(this.tableData.length);
     },
     showDialog() {
-      this.ruleForm.title = null;
-      this.ruleForm.class = null;
-      this.ruleForm.subTitle = null;
-      this.ruleForm.content = null;
-      this.ruleForm.courses = null;
-      this.ruleForm.keyword = null;
-      this.ruleForm.keyword2 = null;
-      this.class = null;
       this.ruleForm.index = "";
       this.ruleForm.iscreate = 0;
       this.dialogVisible = true;

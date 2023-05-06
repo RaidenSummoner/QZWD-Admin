@@ -537,9 +537,9 @@ export default {
         pageSize: 999
       }).then((res) => {
           console.log(res);
-          console.log(res.data.records)
-          this.tableData = res.data.records;
-          this.tableList = res.data.records;
+          console.log(res.data);
+          this.tableData = res.data;
+          this.tableList = res.data;
           console.log(this.tableData.length);
           this.updateStatus();
           this.getKind();
