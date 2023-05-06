@@ -3,13 +3,7 @@
     <div>
       <span>
         <el-dialog :visible.sync="dialogVisible" title="资讯">
-          <el-form
-            :model="ruleForm"
-            :rules="rules"
-            ref="ruleForm"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="内容标题" prop="title">
               <el-input v-model="ruleForm.title"></el-input>
             </el-form-item>
@@ -17,12 +11,8 @@
               <el-input v-model="ruleForm.subTitle"></el-input>
             </el-form-item>
             <el-form-item lable="上传图片" prop="uppicture">
-              <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
-                list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-              >
+              <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card"
+                :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
                 <i class="el-icon-plus"></i>
               </el-upload>
               <el-dialog :visible.sync="dialogVisible1">
@@ -33,110 +23,49 @@
               </p>
             </el-form-item>
             <el-form-item label="内容类目" prop="class">
-              <el-cascader
-                :options="options"
-                :props="props"
-                v-model="ruleForm.class"
-                collapse-tags
-                clearable
-              ></el-cascader>
+              <el-cascader :options="options" :props="props" v-model="ruleForm.class" collapse-tags
+                clearable></el-cascader>
             </el-form-item>
             <el-form-item label="主体内容" prop="content">
-              <el-input
-                type="textarea"
-                placeholder="请输入内容"
-                v-model="ruleForm.content"
-                maxlength="3000"
-                show-word-limit
-              ></el-input>
+              <el-input type="textarea" placeholder="请输入内容" v-model="ruleForm.content" maxlength="3000"
+                show-word-limit></el-input>
             </el-form-item>
 
             <el-form-item label="关键词" prop="keyword">
-              <el-input
-                maxlength="4"
-                show-word-limit
-                v-model="ruleForm.keyword"
-                type="text"
-                style="width: 30%; float: left"
-              ></el-input>
-              <el-input
-                maxlength="4"
-                show-word-limit
-                v-model="ruleForm.keyword2"
-                type="text"
-                style="width: 30%; float: left"
-              ></el-input>
+              <el-input maxlength="4" show-word-limit v-model="ruleForm.keyword" type="text"
+                style="width: 30%; float: left"></el-input>
+              <el-input maxlength="4" show-word-limit v-model="ruleForm.keyword2" type="text"
+                style="width: 30%; float: left"></el-input>
               <el-button @click="addnew">新增</el-button>
             </el-form-item>
             <el-form-item label="相关课程" prop="courses">
-              <el-input
-                type="text"
-                v-model="ruleForm.courses"
-                style="width: 30%; float: left"
-              ></el-input>
+              <el-input type="text" v-model="ruleForm.courses" style="width: 30%; float: left"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button
-                v-if="ruleForm.iscreate === 0"
-                style="float: right"
-                type="primary"
-                @click="submitForm('ruleForm')"
-                >立即创建</el-button
-              >
+              <el-button v-if="ruleForm.iscreate === 0" style="float: right" type="primary"
+                @click="submitForm('ruleForm')">立即创建</el-button>
 
-              <el-button
-                v-if="ruleForm.iscreate === 1"
-                style="float: right"
-                type="primary"
-                @click="updateForm('ruleForm')"
-                >更改</el-button
-              >
+              <el-button v-if="ruleForm.iscreate === 1" style="float: right" type="primary"
+                @click="updateForm('ruleForm')">更改</el-button>
 
-              <el-button style="float: right" @click="resetForm('ruleForm')"
-                >重置</el-button
-              >
+              <el-button style="float: right" @click="resetForm('ruleForm')">重置</el-button>
             </el-form-item>
           </el-form>
         </el-dialog>
         <el-button type="primary" @click="showDialog">+新增</el-button>
-        <el-button
-          type="primary"
-          @click="cancelSelected"
-          :disabled="selectedRows.length === 0"
-          >取消发布</el-button
-        >
-        <el-button
-          type="primary"
-          @click="publishSelected"
-          :disabled="selectedRows.length === 0"
-          >一键发布<i class="el-icon-upload el-icon--right"></i
-        ></el-button>
+        <el-button type="primary" @click="cancelSelected" :disabled="selectedRows.length === 0">取消发布</el-button>
+        <el-button type="primary" @click="publishSelected" :disabled="selectedRows.length === 0">一键发布<i
+            class="el-icon-upload el-icon--right"></i></el-button>
 
-        <el-cascader
-          ref="myCascader"
-          :options="options"
-          :props="props"
-          collapse-tags
-          clearable
-          v-model="cascaded"
-          @change="handleChange"
-        ></el-cascader>
-        <el-input
-          v-model="inputText"
-          placeholder="请输入内容"
-          style="width: 250px"
-        ></el-input>
+        <el-cascader ref="myCascader" :options="options" :props="props" collapse-tags clearable v-model="cascaded"
+          @change="handleChange"></el-cascader>
+        <el-input v-model="inputText" placeholder="请输入内容" style="width: 250px"></el-input>
         <el-button type="primary" @click="search">搜索</el-button>
       </span>
     </div>
 
-    <el-table
-      :data="tableList"
-      style="width: 100%"
-      :default-sort="{ prop: 'date', order: 'descending' }"
-      @selection-change="handleSelectionChange"
-      ref="table"
-    >
+    <el-table :data="tableList" style="width: 100%" :default-sort="{ prop: 'date', order: 'descending' }"
+      @selection-change="handleSelectionChange" ref="table">
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column type="index" :index="indexMethod" width="180">
       </el-table-column>
@@ -150,21 +79,10 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
-            >编辑</el-button
-          >
-          <el-button
-            size="mini"
-            type="danger"
-            @click.native.prevent="deleteRow(scope.$index, tableList)"
-            >删除</el-button
-          >
-          <el-button size="mini" @click="handleview(scope.$index, scope.row)"
-            >预览</el-button
-          >
-          <el-button size="mini" @click="handleput(scope.$index, scope.row)"
-            >发布</el-button
-          >
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="mini" type="danger" @click.native.prevent="deleteRow(scope.$index, tableList)">删除</el-button>
+          <el-button size="mini" @click="handleview(scope.$index, scope.row)">预览</el-button>
+          <el-button size="mini" @click="handleput(scope.$index, scope.row)">发布</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -268,7 +186,7 @@ export default {
     this.getContent();
     this.setSlist(this.tableData);
   },
-  updated() {},
+  updated() { },
   computed: {
     filtableData() {
       return this.tableData.filter((p) => {
@@ -296,7 +214,7 @@ export default {
         }
       }
     },
-    getKind(){
+    getKind() {
       var kindString;
       for (var i = 0; i < this.tableData.length; i++) {
         kindString = this.tableData[i].kind + "-" + this.tableData[i].subKind;
@@ -396,11 +314,11 @@ export default {
 
       //将各个资讯的ID整理成一个数组
       let ids = [];
-      for(let i=0;i<this.selectedRows.length;i++){
+      for (let i = 0; i < this.selectedRows.length; i++) {
         ids.push(this.selectedRows[i].id)
       }
-      contentPublish(ids).then(res=>{
-        if(res.code == 1){
+      contentPublish(ids).then(res => {
+        if (res.code == 1) {
           this.selectedRows.forEach((row) => {
             row.role = 1;
             this.isPost = 1;
@@ -412,7 +330,7 @@ export default {
           });
           this.$refs.table.clearSelection(); // 清空选中行
         }
-        else{
+        else {
           this.$message({
             message: "发布失败",
             type: "warning",
@@ -423,27 +341,62 @@ export default {
     // 一键取消选中行
     cancelSelected() {
       // 发送请求将选中行的状态改为未发布
-      // ...
-      this.selectedRows.forEach((row) => {
-        row.role = 0;
-        row.isPost_str = "草稿";
-      });
-      this.$message({
-        message: "已将选中项置于草稿状态",
-        type: "success",
-      });
-      this.$refs.table.clearSelection(); // 清空选中行
+
+      //将各个资讯的ID整理成一个数组
+      let ids = [];
+      for (let i = 0; i < this.selectedRows.length; i++) {
+        ids.push(this.selectedRows[i].id)
+      }
+      //发送取消发布请求
+      contentUnpublish(ids).then(res => {
+        if (res.code == 1) {
+          this.selectedRows.forEach((row) => {
+            row.role = 0;
+            row.isPost_str = "草稿";
+          });
+          this.$message({
+            message: "已将选中项置于草稿状态",
+            type: "success",
+          });
+          this.$refs.table.clearSelection(); // 清空选中行
+        }
+        else {
+          this.$message({
+            message: "取消发布失败",
+            type: "warning",
+          });
+        }
+      })
+
     },
+
+    //单条发布
     handleput(index, row) {
-      this.tableData[index].role = 1;
-      row.isPost_str = "已发布";
-      console.log(
-        index,
-        this.tableData[index].role,
-        this.tableData[index].isPost_str,
-        this.tableData[index].title
-      );
-      console.log("已提交");
+      //发送发布请求
+      contentPublish(row.id).then(res => {
+        if (res.code == 1) {
+          this.$message({
+            message: "发布成功",
+            type: "success",
+          });
+          this.tableData[index].role = 1;
+          this.tableData[index].isPost_str = "已发布";
+          console.log(
+            index,
+            this.tableData[index].role,
+            this.tableData[index].isPost_str,
+            this.tableData[index].title
+          );
+          console.log("已提交");
+        }
+        else {
+          this.$message({
+            message: "发布失败",
+            type: "warning",
+          });
+        }
+      })
+
     },
     handleChange(a) {
       var clength = this.cascaded.length;
@@ -462,8 +415,8 @@ export default {
     },
     deleteRow(index, rows) {
       console.log("删除ID：", rows[index].id)
-      contentDel(rows[index].id).then(res=>{
-        if(res.code==1){
+      contentDel(rows[index].id).then(res => {
+        if (res.code == 1) {
           rows.splice(index, 1);
           this.tableData[index].isDelete = 1;
           this.$message({
@@ -471,7 +424,7 @@ export default {
             type: "success",
           });
         }
-        else{
+        else {
           this.$message({
             message: "删除失败",
             type: "warning",
@@ -507,7 +460,7 @@ export default {
       this.nowTime = year + "-" + month + "-" + day + " " + time;
     },
     getclass() {
-      
+
       console.log(this.ruleForm.class[0]);
       this.class = this.ruleForm.class[0][0] + "-" + this.ruleForm.class[0][1];
       this.kind = this.ruleForm.class[0][0];
@@ -515,7 +468,7 @@ export default {
       console.log(this.ruleForm.class[0][0]);
       console.log(this.ruleForm.class[0][1]);
     },
-    pushFormClass() {},
+    pushFormClass() { },
 
     handleEdit(index, row) {
       this.tableData[index].iscreate = 1;
@@ -549,16 +502,16 @@ export default {
 
       console.log(this.ruleForm1)
       //发送新增资讯请求
-      contentAdd(this.ruleForm1).then(res=>{
+      contentAdd(this.ruleForm1).then(res => {
         console.log(res)  //请求结果
-        if(res.code == 1){
+        if (res.code == 1) {
           this.ruleForm1 = {};
           this.setSlist(this.tableData);
           this.dialogVisible = false;
           this.resetForm("ruleForm");
           this.resetForm("ruleForm1");
         }
-        else{
+        else {
           console.log("新增失败")
         }
       })
@@ -616,24 +569,48 @@ export default {
       //     _this.tableData=resp.data;
       // })
     },
+
+    //修改资讯页，更改按钮
     updateForm(a) {
       this.getNowDate();
       this.getclass();
+      console.log(this.ruleForm)
       this.$set(this.ruleForm1, "title", this.ruleForm.title);
       this.$set(this.ruleForm1, "kind_str", this.class);
       this.$set(this.ruleForm1, "role", 0);
       this.$set(this.ruleForm1, "isPost_str", "草稿");
       this.$set(this.ruleForm1, "iscreate", 0);
       this.$set(this.ruleForm1, "updateTime", this.nowTime);
-      this.tableData[this.ruleForm.index].title = this.ruleForm1.title;
-      this.tableData[this.ruleForm.index].kind_str = this.ruleForm1.kind_str;
-      this.tableData[this.ruleForm.index].isPost_str =
-        this.ruleForm1.isPost_str;
-      this.tableData[this.ruleForm.index].role = this.ruleForm1.role;
-      this.tableData[this.ruleForm.index].updateTime =
-        this.ruleForm1.updateTime;
-      this.setSlist(this.tableData);
-      this.dialogVisible = false;
+      this.$set(this.ruleForm1, "kind", this.kind);
+      this.$set(this.ruleForm1, "subKind", this.subKind);
+
+      //置入修改项的ID
+      this.ruleForm1.id = this.tableData[this.ruleForm.index].id;
+
+      //发送修改请求
+      console.log(this.ruleForm1)
+      contentUpdate(this.ruleForm1).then(res => {
+        console.log(res)
+        if (res.code == 1) {
+          this.tableData[this.ruleForm.index].title = this.ruleForm1.title;
+          this.tableData[this.ruleForm.index].kind_str = this.ruleForm1.kind_str;
+          this.tableData[this.ruleForm.index].isPost_str = this.ruleForm1.isPost_str;
+          this.tableData[this.ruleForm.index].role = this.ruleForm1.role;
+          this.tableData[this.ruleForm.index].updateTime = this.ruleForm1.updateTime;
+          this.setSlist(this.tableData);
+          this.dialogVisible = false;
+          this.$message({
+            message: "修改成功",
+            type: "success",
+          });
+        }
+        else {
+          this.$message({
+            message: "修改失败",
+            type: "warning",
+          });
+        }
+      })
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
