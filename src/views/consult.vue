@@ -2,7 +2,7 @@
   <div>
     <div>
       <span>
-        <el-dialog :visible.sync="dialogVisible" title="咨询">
+        <el-dialog :visible.sync="dialogVisible" title="资讯">
           <el-form
             :model="ruleForm"
             :rules="rules"
@@ -140,11 +140,11 @@
       <el-table-column type="selection" width="55"> </el-table-column>
       <el-table-column type="index" :index="indexMethod" width="180">
       </el-table-column>
-      <el-table-column prop="title" label="咨询标题" width="180">
+      <el-table-column prop="title" label="资讯标题" width="180">
       </el-table-column>
       <el-table-column prop="isPost_str" label="发布状态" width="180">
       </el-table-column>
-      <el-table-column prop="kind_str" label="咨询类目" width="180">
+      <el-table-column prop="kind_str" label="资讯类目" width="180">
       </el-table-column>
       <el-table-column prop="updateTime" label="日期" sortable width="180">
       </el-table-column>
@@ -172,7 +172,7 @@
 </template>
 <script>
 import { Dialog } from "element-ui";
-import { contentGetAll } from "@/api/content";
+import { contentGetAll, contentAdd, contentDel } from "@/api/content";
 export default {
   data() {
     return {
@@ -445,12 +445,23 @@ export default {
       return index + 1;
     },
     deleteRow(index, rows) {
-      rows.splice(index, 1);
-      this.tableData[index].isDelete = 1;
-      this.$message({
-        message: "已删除了对应的行",
-        type: "success",
-      });
+      console.log("删除ID：", rows[index].id)
+      contentDel(rows[index].id).then(res=>{
+        if(res.code==1){
+          rows.splice(index, 1);
+          this.tableData[index].isDelete = 1;
+          this.$message({
+            message: "已删除了对应的行",
+            type: "success",
+          });
+        }
+        else{
+          this.$message({
+            message: "删除失败",
+            type: "warning",
+          });
+        }
+      })
     },
     getNowDate() {
       var date = new Date();
@@ -500,6 +511,8 @@ export default {
       this.ruleForm.keyword2 = this.tableData[index].keyword2;
       this.dialogVisible = true;
     },
+
+    //新增资讯页，立即创建按钮
     submitForm(formName) {
       this.getNowDate();
       this.getclass();
@@ -510,10 +523,25 @@ export default {
       this.$set(this.ruleForm1, "iscreate", 0);
       this.$set(this.ruleForm1, "updateTime", this.nowTime);
       this.tableData.push(this.ruleForm1);
-      console.log(this.tableData, "table");
-      console.log(this.ruleForm1.class, "classsss");
-      console.log(this.class, "kind_str");
-      this.ruleForm1 = {};
+
+      console.log(this.ruleForm1)
+      //发送新增资讯请求
+      contentAdd(this.ruleForm1).then(res=>{
+        console.log(res)  //请求结果
+        if(res.code == 1){
+          this.ruleForm1 = {};
+          this.setSlist(this.tableData);
+          this.dialogVisible = false;
+          this.resetForm("ruleForm");
+          this.resetForm("ruleForm1");
+        }
+        else{
+          console.log("新增失败")
+        }
+      })
+      // console.log(this.tableData, "table");
+      // console.log(this.ruleForm1.class, "classsss");
+      // console.log(this.class, "kind_str");
       // this.$refs[formName].validate((valid) => {
       //   if (valid) {
       //     alert("submit!");
@@ -526,10 +554,6 @@ export default {
       //   }
       // });
 
-      this.setSlist(this.tableData);
-      this.dialogVisible = false;
-      resetForm("ruleForm");
-      resetForm("ruleForm1");
     },
     getContent() {
       contentGetAll()
