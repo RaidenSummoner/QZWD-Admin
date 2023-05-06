@@ -27,9 +27,8 @@ export function contentAdd(data){
 //删除
 export function contentDel(data){
     return request({
-        url: `/content`,
+        url: `/content?id=${data}`,
         method: 'DELETE',
-        data
     })
 }
 
