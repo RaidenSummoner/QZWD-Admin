@@ -507,10 +507,13 @@ export default {
       this.nowTime = year + "-" + month + "-" + day + " " + time;
     },
     getclass() {
-      console.log(this.ruleForm.class[0][0]);
-      console.log(this.ruleForm.class[0][1]);
+      
       console.log(this.ruleForm.class[0]);
       this.class = this.ruleForm.class[0][0] + "-" + this.ruleForm.class[0][1];
+      this.kind = this.ruleForm.class[0][0];
+      this.subKind = this.ruleForm.class[0][1];
+      console.log(this.ruleForm.class[0][0]);
+      console.log(this.ruleForm.class[0][1]);
     },
     pushFormClass() {},
 
@@ -520,6 +523,8 @@ export default {
       this.ruleForm.index = index;
       /*Give value to dialog!!! */
       this.ruleForm.title = this.tableData[index].title;
+      this.ruleForm.kind = this.tableData[index].kind;
+      this.ruleForm.subKind = this.tableData[index].subKind;
       this.ruleForm.subTitle = this.tableData[index].subTitle;
       this.ruleForm.content = this.tableData[index].content;
       this.ruleForm.courses = this.tableData[index].courses;
@@ -534,6 +539,8 @@ export default {
       this.getclass();
       this.$set(this.ruleForm1, "title", this.ruleForm.title);
       this.$set(this.ruleForm1, "subTitle", this.subTitle);
+      this.$set(this.ruleForm1, "kind", this.kind);
+      this.$set(this.ruleForm1, "subKind", this.subKind);
       this.$set(this.ruleForm1, "isPost_str", "草稿");
       this.$set(this.ruleForm1, "kind_str", this.class);
       this.$set(this.ruleForm1, "iscreate", 0);
