@@ -434,7 +434,6 @@ export default {
     },
     getNowDate() {
       var date = new Date();
-
       var sign2 = ":";
       var year = date.getFullYear(); // 年
       var month = date.getMonth() + 1; // 月
@@ -489,15 +488,18 @@ export default {
     //新增资讯页，立即创建按钮
     submitForm(formName) {
       this.getNowDate();
+      this.$set(this.ruleForm1, "updateTime", this.nowTime);
       this.getclass();
       this.$set(this.ruleForm1, "title", this.ruleForm.title);
-      this.$set(this.ruleForm1, "subTitle", this.subTitle);
+      this.$set(this.ruleForm1, "subTitle", this.ruleForm.subTitle);
       this.$set(this.ruleForm1, "kind", this.kind);
       this.$set(this.ruleForm1, "subKind", this.subKind);
       this.$set(this.ruleForm1, "isPost_str", "草稿");
       this.$set(this.ruleForm1, "kind_str", this.class);
       this.$set(this.ruleForm1, "iscreate", 0);
-      this.$set(this.ruleForm1, "updateTime", this.nowTime);
+      this.$set(this.ruleForm1, "content", this.ruleForm.content);
+      this.$set(this.ruleForm1, "keyword", this.ruleForm.keyword);
+      this.$set(this.ruleForm1, "keyword2", this.ruleForm.keyword2);
       this.tableData.push(this.ruleForm1);
 
       console.log(this.ruleForm1)
