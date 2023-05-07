@@ -3,81 +3,76 @@
     <el-row>
       <el-col :span="10">
         <!--资讯，主类目-->
-            <el-table
-              :data="kind_consult_1"
-              highlight-current-row
-              v-loading="listLoading"
-              @selection-change="selsChange"
-              style="width: 100%"
-            >
-            
-              <el-table-column prop="kind" label="资讯一级类目" width="120" >
-              </el-table-column>
-              <el-table-column label="操作" width="300">
-                
-                <template slot-scope="scope">
-                  <!-- <el-button type="success" size="small" @click="handleEdit(scope.$index, scope.row)">新增</el-button> -->
-                  <el-button
-                    type="success"
-                    size="small"
-                    @click="addRow(kind_consult_1, 1)"
-                    >新增</el-button
-                  >
-                  
-                  <el-button
-                    type="primary"
-                    size="small"
-                    @click="handleEdit(1, scope.$index, scope.row)"
-                    >编辑</el-button
-                  >
-                  <el-button
-                    size="small"
-                    type="danger"
-                    @click="handleDelete(scope.$index, kind_consult_1)"
-                    >删除</el-button
-                  >
-                  
-                </template>
-                
-              </el-table-column>
-              
-            </el-table>
-            
-          <el-dialog
-            :title="titleMap[dialogStatus]"
-            :visible.sync="FormVisible1"
-            :close-on-click-modal="false"
-            class="edit-form"
-            :before-close="handleClose"
+        <el-table
+          :data="kind_consult_1"
+          highlight-current-row
+          v-loading="listLoading"
+          @selection-change="selsChange"
+          style="width: 100%"
+        >
+          <el-table-column prop="kind" label="资讯一级类目" width="120">
+          </el-table-column>
+          <el-table-column label="操作" width="300">
+            <template slot-scope="scope">
+              <!-- <el-button type="success" size="small" @click="handleEdit(scope.$index, scope.row)">新增</el-button> -->
+              <el-button
+                type="success"
+                size="small"
+                @click="addRow(kind_consult_1, 1)"
+                >新增</el-button
+              >
+
+              <el-button
+                type="primary"
+                size="small"
+                @click="handleEdit(1, scope.$index, scope.row)"
+                >编辑</el-button
+              >
+              <el-button
+                size="small"
+                type="danger"
+                @click="handleDelete(scope.$index, kind_consult_1)"
+                >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <el-dialog
+          :title="titleMap[dialogStatus]"
+          :visible.sync="FormVisible1"
+          :close-on-click-modal="false"
+          class="edit-form"
+          :before-close="handleClose"
+        >
+          <el-form
+            :model="Form1_1"
+            label-width="100px"
+            :rules="editFormRules"
+            ref="Form1_1"
           >
-            <el-form
-              :model="Form1_1"
-              label-width="100px"
-              :rules="editFormRules"
-              ref="Form1_1"
+            <el-form-item label="一级类目：" prop="kind">
+              <el-input v-model="Form1_1.kind" auto-complete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click.native="handleCancel(1, 'Form1_1')"
+              >取消</el-button
             >
-              <el-form-item label="一级类目：" prop="kind">
-                <el-input v-model="Form1_1.kind" auto-complete="off"></el-input>
-              </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click.native="handleCancel(1,'Form1_1')"
-                >取消</el-button
-              >
-              <el-button
-                v-if="addBtnshow"
-                type="primary"
-                @click.native="confirmAdd(1, 'Form1_1')"
-                >确定</el-button
-              >
-              <el-button
-                v-if="editBtnshow"
-                type="primary"
-                @click.native="confirmEdit(1, 'Form1_1')"
-                >确定</el-button
-              >
-            </div>
-          </el-dialog>
+            <el-button
+              v-if="addBtnshow"
+              type="primary"
+              @click.native="confirmAdd(1, 'Form1_1')"
+              >确定</el-button
+            >
+            <el-button
+              v-if="editBtnshow"
+              type="primary"
+              @click.native="confirmEdit(1, 'Form1_1')"
+              >确定</el-button
+            >
+          </div>
+        </el-dialog>
       </el-col>
       <!--资讯，子类目-->
       <el-col :span="10">
@@ -137,7 +132,7 @@
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-              <el-button @click.native="handleCancel(2,'Form1_2')"
+              <el-button @click.native="handleCancel(2, 'Form1_2')"
                 >取消</el-button
               >
               <el-button
@@ -222,7 +217,7 @@
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-              <el-button @click.native="handleCancel(3,'Form2_1')"
+              <el-button @click.native="handleCancel(3, 'Form2_1')"
                 >取消</el-button
               >
               <el-button
@@ -306,7 +301,7 @@
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-              <el-button @click.native="handleCancel(4,'Form2_2')"
+              <el-button @click.native="handleCancel(4, 'Form2_2')"
                 >取消</el-button
               >
               <el-button
@@ -329,12 +324,18 @@
   </div>
 </template>
 <script>
-import {getKind, addKind, delKind, updateKind, getKindById, getKindByLevel} from "@/api/kind";
+import {
+  getKind,
+  addKind,
+  delKind,
+  updateKind,
+  getKindById,
+  getKindByLevel,
+} from "@/api/kind";
 var _index;
 export default {
   data() {
     return {
-
       titleMap: {
         addEquipment: "新增",
         editEquipment: "编辑",
@@ -361,10 +362,10 @@ export default {
         kind: "",
         level: "",
       },
-      kind_consult_1: [{ kind: "产品", level: "1" }],
-      kind_consult_2: [{ kind: "案例分享", level: "2" }],
-      kind_course_1: [{ kind: "开发", level: "1" }],
-      kind_course_2: [{ kind: "学习资料", level: "2" }],
+      kind_consult_1: [{ kind: "产品", level: "1", id:""}],
+      kind_consult_2: [{ kind: "案例分享", level: "2" , id:""}],
+      kind_course_1: [{ kind: "开发", level: "1" , id:""}],
+      kind_course_2: [{ kind: "学习资料", level: "2" , id:""}],
       editFormRules: {
         kind: [{ required: true, message: "请输入 ", trigger: "blur" }],
       },
@@ -389,18 +390,33 @@ export default {
     this.getAllKind();
   },
   methods: {
+    handleConsultKindLevel() {},
     getAllKind() {
       getKind()
-      .then((res) => {
+        .then((res) => {
           console.log(res.data);
-          console.log(this.tableData.length);
-          this.updateStatus();
-          this.getKind();
+          console.log(res.data.length);
+          console.log(res.data[1].level);
+          var a = 0,b = 0,arrList1 = [],arrList2 = [];
+          for (var i = 0; i < res.data.length; i++) { //对咨询一二级类目进行分类！！！！后期补上course的！！
+            if (res.data[i].level == 1) {
+              a++;
+              arrList1.push(res.data[i]);
+            } else if (res.data[i].level == 2) {
+              b++;
+              arrList2.push(res.data[i]);
+            }
+          }
+          this.kind_consult_1 = arrList1;
+          this.kind_consult_2 = arrList2;
+          console.log(arrList1);
+          console.log(arrList2);
         })
         .catch((err) => {
           console.log(err);
         });
     },
+
     // searchUser(){
     //   console.log(this.searchForm.name)
     //   var username = this.searchForm.name;
@@ -569,20 +585,16 @@ export default {
       this.FormVisible1 = false;
     },
     //点击取消
-    handleCancel(e,formName) {
-      if(e == 1){
-            this.FormVisible1 = false;
-        }
-        else if(e == 2){
-            this.FormVisible2 = false;
-        }
-        else if(e == 3){
-            this.FormVisible3 = false;
-        }
-        else if(e == 4){
-            this.FormVisible4 = false;
-        }
-      
+    handleCancel(e, formName) {
+      if (e == 1) {
+        this.FormVisible1 = false;
+      } else if (e == 2) {
+        this.FormVisible2 = false;
+      } else if (e == 3) {
+        this.FormVisible3 = false;
+      } else if (e == 4) {
+        this.FormVisible4 = false;
+      }
     },
     // 删除
     handleDelete(index, row) {
