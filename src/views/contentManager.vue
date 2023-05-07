@@ -340,39 +340,39 @@ export default {
         addEquipment: "新增",
         editEquipment: "编辑",
       },
-      id_temp:null,
+      id_temp: null,
 
       //新增和编辑弹框标题
       dialogStatus: "",
       Form1_1: {
         kind: "",
-        id:null,
+        id: null,
         level: "1",
       },
-      Form1_2:{
+      Form1_2: {
         kind: "",
-        id:null,
+        id: null,
         level: "2",
       },
       Form2_1: {
         kind: "",
-        id:null,
+        id: null,
         level: "1",
       },
       Form2_2: {
         kind: "",
-        id:null,
+        id: null,
         level: "2",
       },
-      Form:{
+      Form: {
         kind: "",
-        id:null,
+        id: null,
         level: "",
       },
-      kind_consult_1: [{ kind: "", level: "1", id:""}],
-      kind_consult_2: [{ kind: "", level: "2" , id:""}],
-      kind_course_1: [{ kind: "", level: "1" , id:""}],
-      kind_course_2: [{ kind: "", level: "2" , id:""}],
+      kind_consult_1: [{ kind: "", level: "1", id: "" }],
+      kind_consult_2: [{ kind: "", level: "2", id: "" }],
+      kind_course_1: [{ kind: "", level: "1", id: "" }],
+      kind_course_2: [{ kind: "", level: "2", id: "" }],
       editFormRules: {
         kind: [{ required: true, message: "请输入 ", trigger: "blur" }],
       },
@@ -404,8 +404,12 @@ export default {
           console.log(res.data);
           console.log(res.data.length);
           console.log(res.data[1].level);
-          var a = 0,b = 0,arrList1 = [],arrList2 = [];
-          for (var i = 0; i < res.data.length; i++) { //对咨询一二级类目进行分类！！！！后期补上course的！！
+          var a = 0,
+            b = 0,
+            arrList1 = [],
+            arrList2 = [];
+          for (var i = 0; i < res.data.length; i++) {
+            //对咨询一二级类目进行分类！！！！后期补上course的！！
             if (res.data[i].level == 1) {
               a++;
               arrList1.push(res.data[i]);
@@ -460,7 +464,6 @@ export default {
           kind: "",
           level: 1,
         };
-        
       } else if (e == 2) {
         this.FormVisible2 = true;
         this.Form1_2 = {
@@ -488,35 +491,31 @@ export default {
     confirmAdd(e) {
       // this.users = this.users || []
       if (e == 1) {
-        addKind(this.Form1_1).then(res => {
-        console.log(res)  //请求结果
-        if (res.code == 1) {
-          this.dialogVisible = false;
-          this.kind_consult_1.push({
-          kind: this.Form1_1.kind,
+        addKind(this.Form1_1).then((res) => {
+          console.log(res); //请求结果
+          if (res.code == 1) {
+            this.dialogVisible = false;
+            this.kind_consult_1.push({
+              kind: this.Form1_1.kind,
+            });
+            this.FormVisible1 = false;
+          } else {
+            console.log("新增失败");
+          }
         });
-          this.FormVisible1 = false;
-        }
-        else {
-          console.log("新增失败")
-        }
-      })
-        
       } else if (e == 2) {
-        addKind(this.Form1_2).then(res => {
-        console.log(res)  //请求结果
-        if (res.code == 1) {
-          this.dialogVisible = false;
-          this.kind_consult_2.push({
-          kind: this.Form1_2.kind,
+        addKind(this.Form1_2).then((res) => {
+          console.log(res); //请求结果
+          if (res.code == 1) {
+            this.dialogVisible = false;
+            this.kind_consult_2.push({
+              kind: this.Form1_2.kind,
+            });
+            this.FormVisible2 = false;
+          } else {
+            console.log("新增失败");
+          }
         });
-          this.FormVisible2 = false;
-        }
-        else {
-          console.log("新增失败")
-        }
-      })
-        
       } else if (e == 3) {
         this.kind_course_1.push({
           kind: this.Form2_1.kind,
@@ -538,6 +537,7 @@ export default {
         this.Form = Object.assign({}, row); //这句是关键！！！
         _index = index;
         console.log(index);
+        //获取id！！！
         console.log(this.kind_consult_1[index].id);
         this.id_temp = this.kind_consult_1[index].id;
 
@@ -549,6 +549,9 @@ export default {
         this.Form1_1.level = 1;
       } else if (e == 2) {
         this.FormVisible2 = true;
+        //获取id！！！
+        console.log(this.kind_consult_2[index].id);
+        this.id_temp = this.kind_consult_2[index].id;
         this.Form = Object.assign({}, row); //这句是关键！！！
         _index = index;
         console.log(index);
@@ -585,23 +588,31 @@ export default {
       console.log(editdata);
       console.log(this.id_temp);
       if (e == 1) {
-        console.log(this.Form1_1)
+        console.log(this.Form1_1);
         this.Form1_1.id = this.id_temp;
-        updateKind(this.Form1_1).then(res => {
-        console.log(res)  //请求结果
-        if (res.code == 1) {
-          this.FormVisible1 = false;
-          
-          this.kind_consult_1[editdata].kind = this.Form1_1.kind;
-        }
-        else {
-          console.log("修改失败")
-        }
-      })
-        
+        updateKind(this.Form1_1).then((res) => {
+          console.log(res); //请求结果
+          if (res.code == 1) {
+            this.FormVisible1 = false;
+
+            this.kind_consult_1[editdata].kind = this.Form1_1.kind;
+          } else {
+            console.log("修改失败");
+          }
+        });
       } else if (e == 2) {
-        this.kind_consult_2[editdata].kind = this.Form1_2.kind;
-        this.FormVisible2 = false;
+        console.log(this.Form1_2);
+        this.Form1_2.id = this.id_temp;
+        updateKind(this.Form1_2).then((res) => {
+          console.log(res); //请求结果
+          if (res.code == 1) {
+            this.FormVisible2 = false;
+
+            this.kind_consult_2[editdata].kind = this.Form1_2.kind;
+          } else {
+            console.log("修改失败");
+          }
+        });
       } else if (e == 3) {
         this.kind_course_1[editdata].kind = this.Form2_1.kind;
         this.FormVisible3 = false;
@@ -650,13 +661,24 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.$message({
-            // delete:row.splice(index, 1),
-            type: "success",
-            message: "删除成功!",
-            delete: row.splice(index, 1), //splice 删除对象是数unfuntion组   如果是对象会出现错误  row.solice not is
+          var del_id = row[index].id;
+          console.log(del_id);
+          delKind(del_id).then((res) => {
+            if (res.code == 1) {
+              this.$message({
+                // delete:row.splice(index, 1),
+                type: "success",
+                message: "删除成功!",
+                delete: row.splice(index, 1), //splice 删除对象是数unfuntion组   如果是对象会出现错误  row.solice not is
 
-            // url: this.$router.push('/')
+                // url: this.$router.push('/')
+              });
+            } else {
+              this.$message({
+                message: "删除失败",
+                type: "warning",
+              });
+            }
           });
         })
         .catch(() => {
