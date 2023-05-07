@@ -340,26 +340,33 @@ export default {
         addEquipment: "新增",
         editEquipment: "编辑",
       },
+      id_temp:null,
+
       //新增和编辑弹框标题
       dialogStatus: "",
       Form1_1: {
         kind: "",
-        level: "",
+        id:null,
+        level: "1",
       },
-      Form1_2: {
+      Form1_2:{
         kind: "",
-        level: "",
+        id:null,
+        level: "2",
       },
       Form2_1: {
         kind: "",
-        level: "",
+        id:null,
+        level: "1",
       },
       Form2_2: {
         kind: "",
-        level: "",
+        id:null,
+        level: "2",
       },
-      Form: {
+      Form:{
         kind: "",
+        id:null,
         level: "",
       },
       kind_consult_1: [{ kind: "", level: "1", id:""}],
@@ -451,26 +458,26 @@ export default {
         this.FormVisible1 = true;
         this.Form1_1 = {
           kind: "",
-          level: "1",
+          level: 1,
         };
         
       } else if (e == 2) {
         this.FormVisible2 = true;
         this.Form1_2 = {
           kind: "",
-          level: "2",
+          level: 2,
         };
       } else if (e == 3) {
         this.FormVisible3 = true;
         this.Form2_1 = {
           kind: "",
-          level: "1",
+          level: 1,
         };
       } else if (e == 4) {
         this.FormVisible4 = true;
         this.Form2_2 = {
           kind: "",
-          level: "2",
+          level: 2,
         };
       }
       this.dialogStatus = "addEquipment";
@@ -531,11 +538,15 @@ export default {
         this.Form = Object.assign({}, row); //这句是关键！！！
         _index = index;
         console.log(index);
+        console.log(this.kind_consult_1[index].id);
+        this.id_temp = this.kind_consult_1[index].id;
+
         console.log(_index);
 
         this.dialogStatus = "editEquipment";
         this.addBtnshow = false;
         this.editBtnshow = true;
+        this.Form1_1.level = 1;
       } else if (e == 2) {
         this.FormVisible2 = true;
         this.Form = Object.assign({}, row); //这句是关键！！！
@@ -572,9 +583,22 @@ export default {
     confirmEdit(e) {
       var editdata = _index;
       console.log(editdata);
+      console.log(this.id_temp);
       if (e == 1) {
-        this.kind_consult_1[editdata].kind = this.Form1_1.kind;
-        this.FormVisible1 = false;
+        console.log(this.Form1_1)
+        this.Form1_1.id = this.id_temp;
+        updateKind(this.Form1_1).then(res => {
+        console.log(res)  //请求结果
+        if (res.code == 1) {
+          this.FormVisible1 = false;
+          
+          this.kind_consult_1[editdata].kind = this.Form1_1.kind;
+        }
+        else {
+          console.log("修改失败")
+        }
+      })
+        
       } else if (e == 2) {
         this.kind_consult_2[editdata].kind = this.Form1_2.kind;
         this.FormVisible2 = false;
