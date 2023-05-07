@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col :span="10">
-        <!--咨询，主类目-->
+        <!--资讯，主类目-->
             <el-table
               :data="kind_consult_1"
               highlight-current-row
@@ -11,7 +11,7 @@
               style="width: 100%"
             >
             
-              <el-table-column prop="kind" label="咨询一级类目" width="120" >
+              <el-table-column prop="kind" label="资讯一级类目" width="120" >
               </el-table-column>
               <el-table-column label="操作" width="300">
                 
@@ -79,7 +79,7 @@
             </div>
           </el-dialog>
       </el-col>
-      <!--咨询，子类目-->
+      <!--资讯，子类目-->
       <el-col :span="10">
         <div>
           <div style="text-align: left"></div>
@@ -91,7 +91,7 @@
               @selection-change="selsChange"
               style="width: 100%"
             >
-              <el-table-column prop="kind" label="咨询二级类目" width="120">
+              <el-table-column prop="kind" label="资讯二级类目" width="120">
               </el-table-column>
               <el-table-column label="操作" width="300">
                 <template slot-scope="scope">
@@ -329,10 +329,12 @@
   </div>
 </template>
 <script>
+import {getKind, addKind, delKind, updateKind, getKindById, getKindByLevel} from "@/api/kind";
 var _index;
 export default {
   data() {
     return {
+
       titleMap: {
         addEquipment: "新增",
         editEquipment: "编辑",
@@ -382,7 +384,23 @@ export default {
       searchForm: [],
     };
   },
+  created() {
+    //    this.getTabledata();
+    this.getAllKind();
+  },
   methods: {
+    getAllKind() {
+      getKind()
+      .then((res) => {
+          console.log(res.data);
+          console.log(this.tableData.length);
+          this.updateStatus();
+          this.getKind();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     // searchUser(){
     //   console.log(this.searchForm.name)
     //   var username = this.searchForm.name;
