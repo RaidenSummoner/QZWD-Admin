@@ -362,10 +362,10 @@ export default {
         kind: "",
         level: "",
       },
-      kind_consult_1: [{ kind: "产品", level: "1", id:""}],
-      kind_consult_2: [{ kind: "案例分享", level: "2" , id:""}],
-      kind_course_1: [{ kind: "开发", level: "1" , id:""}],
-      kind_course_2: [{ kind: "学习资料", level: "2" , id:""}],
+      kind_consult_1: [{ kind: "", level: "1", id:""}],
+      kind_consult_2: [{ kind: "", level: "2" , id:""}],
+      kind_course_1: [{ kind: "", level: "1" , id:""}],
+      kind_course_2: [{ kind: "", level: "2" , id:""}],
       editFormRules: {
         kind: [{ required: true, message: "请输入 ", trigger: "blur" }],
       },
@@ -453,6 +453,7 @@ export default {
           kind: "",
           level: "1",
         };
+        
       } else if (e == 2) {
         this.FormVisible2 = true;
         this.Form1_2 = {
@@ -480,15 +481,35 @@ export default {
     confirmAdd(e) {
       // this.users = this.users || []
       if (e == 1) {
-        this.kind_consult_1.push({
+        addKind(this.Form1_1).then(res => {
+        console.log(res)  //请求结果
+        if (res.code == 1) {
+          this.dialogVisible = false;
+          this.kind_consult_1.push({
           kind: this.Form1_1.kind,
         });
-        this.FormVisible1 = false;
+          this.FormVisible1 = false;
+        }
+        else {
+          console.log("新增失败")
+        }
+      })
+        
       } else if (e == 2) {
-        this.kind_consult_2.push({
+        addKind(this.Form1_2).then(res => {
+        console.log(res)  //请求结果
+        if (res.code == 1) {
+          this.dialogVisible = false;
+          this.kind_consult_2.push({
           kind: this.Form1_2.kind,
         });
-        this.FormVisible2 = false;
+          this.FormVisible2 = false;
+        }
+        else {
+          console.log("新增失败")
+        }
+      })
+        
       } else if (e == 3) {
         this.kind_course_1.push({
           kind: this.Form2_1.kind,
